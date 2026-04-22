@@ -1,0 +1,96 @@
+<div class="w-full h-50 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000041]">
+    <h1 class="text-4xl font-bold mb-4 text-white">Lịch sử đặt chỗ</h1>
+  </div>
+</div>
+
+<div class="bg-white px-0 md:px-10 py-6">
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead>
+        <tr class="bg-[#1ba000] text-white text-nowrap">
+          <th class="py-2 px-2 text-left">Mã</th>
+          <th class="py-2 px-2 text-left">Điểm Đi</th>
+          <th class="py-2 px-2 text-left">Điểm Đến</th>
+          <th class="py-2 px-2 text-left">Ngày</th>
+          <th class="py-2 px-2 text-left">Thời Gian</th>
+          <th class="py-2 px-2 text-left">Ghế</th>
+          <th class="py-2 px-2 text-left">Trạng Thái</th>
+          <th class="py-2 px-2 text-left">Giá</th>
+          <th class="py-2 px-2 text-center">Thông Tin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings" class="bg-white text-gray-800 border-b text-nowrap">
+          <td class="py-2 px-2 text-gray-500">{{b.bookingCode}}</td>
+          <td class="py-2 px-2 text-green-600">{{b.departure}}</td>
+          <td class="py-2 px-2 text-green-600">{{b.destination}}</td>
+          <td class="py-2 px-2">{{b.dateStart}}</td>
+          <td class="py-2 px-2 text-purple-700 font-mono">{{b.startTime}}</td>
+          <td class="py-2 px-2">
+            <span *ngFor="let s of b.seats; let last = last">{{s.seatName}}<span *ngIf="!last">, </span></span>
+          </td>
+          <td class="py-2 px-2">
+            <span [class]="'px-2 py-1 rounded-full text-xs border ' + getStatusClass(b.status)">{{b.statusName}}</span>
+          </td>
+          <td class="py-2 px-2 text-indigo-600">{{b.totalPrice | currencyVnd}}</td>
+          <td class="py-2 px-2 text-center">
+            <button (click)="showDetail(b)" class="cursor-pointer bg-[#2800c91b] py-1 px-3 rounded">
+              <app-icon name="about"></app-icon>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="bookings.length === 0">
+          <td colspan="9" class="text-center text-gray-500 py-4 bg-gray-200">No tickets booked yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div *ngIf="selectedBooking">
+  <div class="bg-black fixed top-0 left-0 z-[100] opacity-30 w-screen h-screen" (click)="closeDetail()"></div>
+  <div class="fixed top-[10%] md:w-[600px] left-1/2 transform -translate-x-1/2 rounded z-[900]">
+    <div class="w-full rounded-3xl py-4 flex flex-col gap-5">
+      <div class="bg-white rounded-xl p-4 shadow space-y-2">
+        <div class="flex justify-between px-2 py-2 border-b-2">
+          <h1 class="font-extrabold text-gray-600 text-[17px]">Ticket Booking Detail</h1>
+          <span (click)="closeDetail()" class="cursor-pointer"><app-icon name="close"></app-icon></span>
+        </div>
+        <div class="text-xl font-bold">{{selectedBooking.type}} - {{selectedBooking.departure}} - {{selectedBooking.destination}}</div>
+        <p class="text-[11px] text-gray-500">Seat Layout: {{selectedBooking.seatLayout}}</p>
+        <div class="flex justify-between items-center text-center border-t border-b py-2 border-dashed">
+          <div>
+            <div class="text-[14px] font-medium">Departure</div>
+            <div class="text-xl font-bold">{{selectedBooking.startTime}}</div>
+            <div class="text-sm font-medium">{{selectedBooking.departure}}</div>
+          </div>
+          <div>
+            <i class="text-green-600 border-b pl-4 pr-1">...<app-icon name="bus-go"></app-icon></i>
+            <div class="text-xs text-gray-500">{{selectedBooking.travelTime}}</div>
+          </div>
+          <div>
+            <div class="text-[14px] font-medium">Arrival</div>
+            <div class="text-xl font-bold">{{selectedBooking.endTime}}</div>
+            <div class="text-sm font-medium">{{selectedBooking.destination}}</div>
+          </div>
+        </div>
+        <div class="bg-gray-100 p-3 rounded-lg text-sm">
+          <div class="font-semibold">{{selectedBooking.passengerName}}</div>
+          <div class="text-xs text-gray-600">CCCD: {{selectedBooking.passengerCccd}}</div>
+          <div class="mt-2 border-t pt-2 flex justify-between">
+            <div>
+              <strong>Seats:</strong>
+              <span class="text-blue-600 font-medium ml-1" *ngFor="let s of selectedBooking.seats; let last = last">
+                {{s.seatName}}<span *ngIf="!last">, </span>
+              </span>
+            </div>
+            <div class="font-bold text-green-600">{{selectedBooking.totalPrice | currencyVnd}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

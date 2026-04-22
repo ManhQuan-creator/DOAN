@@ -1,0 +1,203 @@
+<div class="bg-[#f5f5f5] min-h-screen">
+  <!-- Banner -->
+  <div class="w-full h-64 flex items-center justify-center"
+       style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+    <div class="w-full h-full flex items-center justify-center bg-[#00000068]">
+      <h1 class="font-bold text-white text-[20px] sm:text-2xl lg:text-4xl">
+        {{ 'TICKET.BUY_TICKETS' | translate }}
+      </h1>
+    </div>
+  </div>
+<!--Trang Mua Ve-->
+ <!-- Search Bar -->
+  <div class="bg-white shadow-lg rounded-xl mx-4 md:mx-[10%] -mt-8 relative z-10 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <span (click)="resetAll()" class="text-green-600 text-sm cursor-pointer hover:underline">
+        Đặt lại
+      </span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <!-- Điểm đi -->
+      <div class="dep-dropdown border border-gray-300 rounded-lg px-3 py-2.5 flex items-center gap-2 relative cursor-pointer"
+           (click)="showDepDropdown = !showDepDropdown; showDestDropdown = false">
+        <app-icon name="directionarrow" class="text-green-500"></app-icon>
+        <span class="flex-1 text-sm text-gray-700 truncate">{{ selectedDeparture || 'Tất cả' }}</span>
+        <app-icon [name]="showDepDropdown ? 'up' : 'dow'" class="text-gray-400 text-xs"></app-icon>
+        <div *ngIf="showDepDropdown"
+             class="absolute left-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 w-full max-h-60 overflow-y-auto"
+             (click)="$event.stopPropagation()">
+          <div (click)="selectDeparture('')"
+               class="px-4 py-2.5 hover:bg-green-50 cursor-pointer text-sm border-b border-gray-100">Tất cả</div>
+          <div *ngFor="let dep of departures"
+               (click)="selectDeparture(dep)"
+               class="px-4 py-2.5 hover:bg-green-50 cursor-pointer text-sm border-b border-gray-100 last:border-0">
+            {{ dep }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Điểm đến -->
+      <div class="dest-dropdown border border-gray-300 rounded-lg px-3 py-2.5 flex items-center gap-2 relative cursor-pointer"
+           (click)="showDestDropdown = !showDestDropdown; showDepDropdown = false">
+        <app-icon name="location" class="text-green-500"></app-icon>
+        <span class="flex-1 text-sm text-gray-700 truncate">{{ selectedDestination || 'Tất cả' }}</span>
+        <app-icon [name]="showDestDropdown ? 'up' : 'dow'" class="text-gray-400 text-xs"></app-icon>
+        <div *ngIf="showDestDropdown"
+             class="absolute left-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 w-full max-h-60 overflow-y-auto"
+             (click)="$event.stopPropagation()">
+          <div (click)="selectDestination('')"
+               class="px-4 py-2.5 hover:bg-green-50 cursor-pointer text-sm border-b border-gray-100">Tất cả</div>
+          <div *ngFor="let dest of destinations"
+               (click)="selectDestination(dest)"
+               class="px-4 py-2.5 hover:bg-green-50 cursor-pointer text-sm border-b border-gray-100 last:border-0">
+            {{ dest }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Ngày -->
+      <div class="border border-gray-300 rounded-lg px-3 py-2.5 flex items-center gap-2 relative cursor-pointer"
+           (click)="openDatePicker(dateInput)">
+        <app-icon name="calendar" class="text-green-500"></app-icon>
+        <span class="flex-1 text-sm text-gray-700">{{ calendar }}</span>
+        <input #dateInput type="date" [value]="rawDate" (change)="onDateChange($event)"
+               class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" [min]="minDate">
+        <app-icon name="dow" class="text-gray-400 text-xs"></app-icon>
+      </div>
+
+      <!-- Tìm vé -->
+      <button (click)="search()"
+              class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg py-2.5 transition-colors cursor-pointer">
+        {{ 'HOME.FIND_TICKET' | translate }}
+    </button>
+    </div>
+  </div>
+
+  <!-- Content: Sidebar + Tickets -->
+  <div class="flex flex-col lg:flex-row gap-5 px-4 md:px-[10%] py-6">
+
+    <!-- Sidebar Filter -->
+    <div class="w-full lg:w-72 flex-shrink-0">
+      <div class="bg-white rounded-xl shadow-md p-5 sticky top-24">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">B{{ 'FILTER.FILTER' | translate }}</h3>
+          <span (click)="resetAll()" class="text-sm text-gray-500 cursor-pointer hover:text-green-600">
+            {{ 'FILTER.RESET_ALL' | translate }}
+          </span>
+        </div>
+
+        <!-- Filter: Tuyến đường -->
+        <div class="mb-5">
+          <h4 class="font-semibold text-gray-700 mb-3">{{ 'FILTER.ROUTE' | translate }}</h4>
+          <div class="space-y-2 max-h-48 overflow-y-auto">
+            <label *ngFor="let route of routes"
+                   class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-1.5 rounded-lg transition-colors">
+              <input type="checkbox"
+                     [checked]="selectedRoutes.includes(route)"
+                     (change)="toggleRoute(route)"
+                     class="w-4 h-4 accent-green-500 cursor-pointer">
+              <app-icon name="bus" class="text-gray-500"></app-icon>
+              <span class="text-sm text-gray-700">{{ route }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filter: Khung giờ -->
+        <div>
+          <h4 class="font-semibold text-gray-700 mb-3">{{ 'FILTER.TIME_SLOT' | translate }}</h4>
+          <div class="space-y-2 max-h-48 overflow-y-auto">
+            <label *ngFor="let slot of timeSlots"
+                   class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-1.5 rounded-lg transition-colors">
+              <input type="checkbox"
+                     [checked]="selectedTimeSlots.includes(slot)"
+                     (change)="toggleTimeSlot(slot)"
+                     class="w-4 h-4 accent-green-500 cursor-pointer">
+              <app-icon name="clock" class="text-gray-500"></app-icon>
+              <span class="text-sm text-gray-700">{{ slot }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticket List -->
+    <div class="flex-1 space-y-4">
+      <div *ngIf="isLoading" class="text-center py-10 text-gray-500">
+        <app-icon name="loading"></app-icon> {{ 'TICKET.LOADING' | translate }}
+      </div>
+
+      <div *ngFor="let ticket of tickets"
+           class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="flex flex-col md:flex-row items-start md:items-center p-5 gap-4">
+          <!-- Info -->
+          <div class="flex-1">
+            <h1 class="text-base md:text-lg font-bold text-gray-800">
+              {{ticket.type}} - {{ticket.departure}} - {{ticket.destination}}
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">{{ 'TICKET.SEAT_LAYOUT' | translate }} - {{ticket.seatLayout}}</p>
+            <p class="text-amber-500 text-sm flex items-center gap-1 mt-1">
+              <app-icon name="bus"></app-icon> {{ticket.type}}
+            </p>
+          </div>
+
+          <!-- Time -->
+          <div class="flex items-center justify-between w-full md:w-auto md:gap-8 text-sm">
+            <div class="text-center">
+              <p class="font-semibold text-gray-800">{{ticket.startTime}}</p>
+              <p class="text-xs text-gray-500">{{ticket.departure}}</p>
+            </div>
+            <div class="text-center px-2">
+              <i class="text-green-600"><app-icon name="arrow-right"></app-icon></i>
+              <p class="text-xs text-gray-500">{{ticket.travelTime}}</p>
+            </div>
+            <div class="text-center">
+              <p class="font-semibold text-gray-800">{{ticket.endTime}}</p>
+              <p class="text-xs text-gray-500">{{ticket.destination}}</p>
+            </div>
+          </div>
+
+          <!-- Action -->
+          <div class="flex flex-col items-end gap-2 md:pl-4">
+            <p class="text-xs text-gray-500">
+              {{ 'TICKET.OFF_DAY' | translate }}:
+              <span class="ml-1 border border-gray-400 text-gray-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                {{ticket.offDay}}
+              </span>
+            </p>
+           <div *ngIf="isOffDay(ticket)">
+    <button disabled
+            class="bg-gray-400 text-white text-sm font-semibold px-6 py-2 rounded-lg cursor-not-allowed opacity-60">
+      {{ 'TICKET.OFF_DAY' | translate }}
+    </button>
+  </div>
+
+  <!-- Ngày thường: cho chọn -->
+  <div *ngIf="!isOffDay(ticket)">
+    <a [routerLink]="getLink(ticket)" (click)="saveSearchDate()">
+      <button class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-6 py-2 rounded-lg cursor-pointer transition-colors">
+        {{ 'TICKET.SELECT_SEAT' | translate }}
+      </button>
+    </a>
+  </div>
+          </div>
+        </div>
+
+        <!-- Facilities -->
+        <div class="border-t border-gray-100 px-5 py-2.5 text-sm flex flex-wrap gap-2 items-center bg-gray-50">
+          <p class="text-gray-500">{{ 'TICKET.FACILITIES' | translate }}:</p>
+          <span *ngFor="let f of ticket.facilities"
+                class="bg-white border border-gray-200 px-3 py-1 rounded-full text-gray-600 text-xs">
+            {{f}}
+          </span>
+        </div>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="!isLoading && tickets.length === 0"
+           class="bg-white rounded-xl shadow-md p-10 text-center">
+        <app-icon name="ticket" class="text-4xl text-gray-300"></app-icon>
+        <p class="text-gray-500 mt-3">{{ 'TICKET.NO_TICKETS' | translate }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="w-full h-40 flex items-center justify-center mb-10"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000068]">
+    <h1 class="font-bold mb-4 text-white text-center text-[20px] sm:text-2xl lg:text-4xl">{{ticketName}}</h1>
+  </div>
+</div>
+<!--gd chon ghe-->
+<div class="flex flex-col md:flex-row gap-5 px-5 py-5 bg-[#f9f9f9] xl:px-[20%]">
+  <!-- Left: Booking info -->
+  <div class="w-full md:w-2/5 border rounded-[10px] border-gray-300 bg-white px-5 py-5 flex flex-col gap-4 sticky top-20 h-fit">
+    <div class="text-[12px]">
+      <h1 class="text-gray-400 text-sm font-medium">{{ 'TICKET.JOURNEY_DATE' | translate }}</h1>
+       <div class="border text-sm bg-white border-[#8aff73] rounded-lg px-3 py-2 mt-1">{{calendar}}</div>
+    </div>
+
+    <!-- Điểm đón -->
+    <div *ngIf="ticket">
+      <h1 class="text-gray-400 text-sm font-medium">{{ 'TICKET.PICKUP' | translate }}</h1>
+      <div class="border text-sm bg-white border-[#8aff73] rounded-lg px-3 py-2 mt-1 text-green-700 font-medium">
+        {{ticket.departure}}
+      </div> 
+    </div>
+
+    <!-- Điểm trả -->
+    <div *ngIf="ticket">
+      <h1 class="text-gray-400 text-sm font-medium">{{ 'TICKET.DROPOFF' | translate }}</h1>
+      <div class="border text-sm bg-white border-[#8aff73] rounded-lg px-3 py-2 mt-1 text-green-700 font-medium">
+        {{ticket.destination}}
+      </div>
+    </div>
+    
+    <!-- ghế đã chọn -->
+    <div *ngIf="selectedSeats.length > 0">
+      <h1 class="text-[14px] text-gray-400 font-semibold mb-2">{{ 'TICKET.SELECTED_SEATS' | translate }}</h1>
+      <div class="flex text-white justify-between items-center bg-[#16a34a] border border-[#16a34a] rounded-t-[6px] px-3 py-2">
+        <p class="font-semibold text-[12px]">{{ 'TICKET.SEAT' | translate }}</p>
+        <p class="font-semibold text-[12px]">{{ 'TICKET.PRICE' | translate }}</p>
+      </div>
+      <div class="bg-white">
+        <div *ngFor="let seat of selectedSeats" class="cursor-pointer flex justify-between border-t border-x border-gray-300 px-3 py-2 text-[14px]">
+          <p class="text-[13px] font-semibold">{{seat.name}}</p>
+          <p class="text-[12px]">{{seat.price | currencyVnd}}</p>
+        </div>
+      </div>
+      <div class="flex justify-between bg-white border border-gray-300 px-3 py-2 font-semibold">
+        <p class="text-[15px]">{{ 'TICKET.TOTAL' | translate }}</p>
+        <p class="text-[13px]">{{totalPrice | currencyVnd}}</p>
+      </div>
+    </div>
+
+    <button (click)="book()" class="text-white rounded-[7px] px-8 py-2 flex items-center bg-[#00a108] cursor-pointer">
+      <span class="text-[13px] font-medium">  {{ authService.isAuthenticated() ? ('TICKET.BOOK_TICKET' | translate) : 'Đăng nhập để đặt vé' }}</span>
+    </button>
+  </div>
+
+  <!-- Right: Seat map -->
+  <div class="grow h-full w-full gap-3 px-10">
+    <h1 class="text-[15px] text-gray-500 font-medium mb-4">{{ 'TICKET.CLICK_TO_SELECT' | translate }}</h1>
+
+    <div class="border border-gray-500 rounded-[10px] p-2">
+      <div class="flex justify-center mt-[-18px] items-center gap-2">
+        <p class="bg-gray-300 px-5 text-[12px] text-gray-500">{{'TICKET.FRONT' | translate }}</p>
+      </div>
+
+      <div class="py-5">
+        <div class="grid grid-cols-4 gap-2 px-2">
+          <div *ngFor="let seat of seats"
+               (click)="toggleSeat(seat)"
+               [class]="'w-full h-12 flex flex-col items-center justify-center border p-1 rounded ' +
+                        (seat.booked ? 'bg-[#767676] text-white cursor-not-allowed' :
+                         isSelected(seat.id) ? 'bg-[#009d05] text-white cursor-pointer' :
+                         'cursor-pointer bg-white text-black')">
+            <span class="text-[14px]">{{seat.name}}</span>
+            <div class="bg-white border border-gray-500 h-1 w-6 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center mb-[-17px] items-center gap-2">
+        <p class="bg-gray-300 px-5 text-[12px] text-gray-500">{{ 'TICKET.REAR' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="h-full py-10">
+      <div class="grid grid-cols-3 gap-5">
+        <div class="flex items-center gap-2">
+          <div class="bg-white border rounded-[3px] h-5 w-15 p-1"></div>
+          <p class="text-[12px] text-gray-500">{{ 'TICKET.AVAILABLE' | translate }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="bg-[#008428] rounded-[3px] h-5 w-15 p-1"></div>
+          <p class="text-[12px] text-gray-500">{{ 'TICKET.SELECTED' | translate }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="bg-[#767676] rounded-[3px] h-5 w-15 p-1"></div>
+          <p class="text-[12px] text-gray-500">{{ 'TICKET.BOOKED' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

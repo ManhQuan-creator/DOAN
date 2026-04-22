@@ -1,0 +1,220 @@
+
+    <div class="md:p-4 w-full space-y-4">
+    <div class="py-3 flex justify-between px-3 items-center w-full shadow-md bg-white md:rounded-lg">
+        <div class="flex items-center gap-2">
+            <h1 class="text-xl sm:text-3xl font-bold text-gray-700">Quản Lí Vé</h1>
+            <div class="bg-blue-500 shadow-md px-4 py-2 rounded-lg text-white font-bold">{{tickets.length}}</div>
+        </div>
+        <button (click)="toggleCreateForm()"
+                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2 text-sm font-semibold transition">
+            <app-icon [name]="showCreateForm ? 'close' : 'plus'"></app-icon>
+            {{ showCreateForm ? 'Đóng' : 'Tạo Vé Mới' }}
+        </button>
+    </div>  
+
+    <!-- Create Form -->
+    <div *ngIf="showCreateForm" class="bg-white rounded-xl shadow-md p-6 space-y-4">
+        <h2 class="text-lg font-bold text-gray-700 border-b pb-3">Tạo Vé Xe Mới</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Điểm đi <sup class="text-red-500">*</sup></label>
+                <input type="text" [(ngModel)]="newTicket.departure" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="Hà Nội">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Điểm đến <sup class="text-red-500">*</sup></label>
+                <input type="text" [(ngModel)]="newTicket.destination" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="Thái Bình">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Giờ đi <sup class="text-red-500">*</sup></label>
+                <input type="text" [(ngModel)]="newTicket.startTime" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="08:00 AM">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Giờ đến <sup class="text-red-500">*</sup></label>
+                <input type="text" [(ngModel)]="newTicket.endTime" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="04:30 PM">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Thời gian di chuyển</label>
+                <input type="text" [(ngModel)]="newTicket.travelTime" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="08:30 min">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Ngày nghỉ</label>
+                <select [(ngModel)]="newTicket.offDay" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none">
+                    <option value="">Không có</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Bố trí ghế</label>
+                <select [(ngModel)]="newTicket.seatLayout" class="mt-1 w-full border rounded-lg p-2">
+                    <option value="2x2">2x2</option>
+                    <option value="2x3">2x3</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Số ghế</label>
+                <input type="number" [(ngModel)]="newTicket.seatsCount" min="8" max="60" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none">
+            </div>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tiện ích</label>
+            <div class="flex gap-2 mb-2">
+                <input type="text" [(ngModel)]="facilityInput" (keydown.enter)="addFacility()" class="flex-1 border rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none" placeholder="Nhập tiện ích...">
+                <button (click)="addFacility()" class="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-600">Thêm</button>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <span *ngFor="let f of newTicket.facilities; let i = index" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                    {{f}}
+                    <button (click)="removeFacility(i)" class="text-red-500 hover:text-red-700 cursor-pointer ml-1">&times;</button>
+                </span>
+            </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-4 border-t">
+            <button (click)="showCreateForm = false" class="px-6 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition">Hủy</button>
+            <button (click)="createTicket()" [disabled]="isCreating"
+                    [class]="'px-6 py-2 rounded-lg text-white font-semibold transition ' + (isCreating ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 cursor-pointer')">
+                <span *ngIf="isCreating"><app-icon name="loading"></app-icon> Đang tạo...</span>
+                <span *ngIf="!isCreating">Tạo Vé</span>
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Ticket List -->
+    <div *ngFor="let t of tickets" class="border rounded-xl bg-white shadow-md overflow-hidden">
+        <div class="flex flex-col lg:flex-row p-5 gap-4">
+            <div class="flex-1 space-y-1">
+                <h1 class="text-base lg:text-lg font-semibold">{{t.type}} - {{t.departure}} - {{t.destination}}</h1>
+                <p class="text-[11px] text-gray-500">Bố Trí Ghế: {{t.seatLayout}} | Tổng ghế: {{t.totalSeats}}</p>
+                <p class="text-amber-400 text-sm flex items-center gap-1 mt-1">
+                    <app-icon name="bus"></app-icon> {{t.type}}
+                </p>
+            </div>
+            <div class="flex items-center justify-between w-full lg:w-auto lg:gap-8 text-sm">
+                <div class="text-center"><p>{{t.startTime}}</p><p class="text-[11px] text-gray-500">{{t.departure}}</p></div>
+                <div class="text-center"><app-icon name="arrow-right" class="text-green-600"></app-icon><p class="text-[11px] text-gray-500">{{t.travelTime}}</p></div>
+                <div class="text-center"><p>{{t.endTime}}</p><p class="text-[11px] text-gray-500">{{t.destination}}</p></div>
+            </div>
+           <div class="flex flex-col items-end gap-2">
+          <p class="text-[11px]">Ngày Nghỉ:
+            <span class="ml-1 bg-blue-200 text-blue-800 border border-blue-400 px-2 py-1 rounded-full">
+              {{t.offDay || 'Không'}}
+            </span>
+          </p>
+          <!-- Action buttons -->
+          <div class="flex gap-2 mt-1">
+            <button (click)="updateTicket(t)"
+                    class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md text-xs cursor-pointer transition flex items-center gap-1">
+              <app-icon name="upload"></app-icon> Cập Nhập
+            </button>
+            <button (click)="deleteTicket(t.id)"
+                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs cursor-pointer transition flex items-center gap-1">
+              <app-icon name="trash"></app-icon> Xóa
+            </button>
+          </div>
+        </div>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-2 text-sm flex flex-wrap gap-2 items-center">
+            <p class="text-gray-500">Tiện Ích:</p>
+            <span *ngFor="let f of t.facilities" class="bg-gray-100 px-2 py-1 rounded-full text-gray-700 text-xs">{{f}}
+            </span>
+        </div>
+
+<div *ngIf="editingTicketId === t.id" class="p-5 bg-yellow-50 border-l-4 border-yellow-400">
+      <h3 class="text-base font-bold text-yellow-700 mb-4 flex items-center gap-2">
+        <app-icon name="upload"></app-icon> Chỉnh Sửa Vé: {{t.departure}} → {{t.destination}}
+      </h3>
+ 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Điểm đi <sup class="text-red-500">*</sup></label>
+          <input type="text" [(ngModel)]="editTicket.departure"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Điểm đến <sup class="text-red-500">*</sup></label>
+          <input type="text" [(ngModel)]="editTicket.destination"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Giờ đi <sup class="text-red-500">*</sup></label>
+          <input type="text" [(ngModel)]="editTicket.startTime"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Giờ đến <sup class="text-red-500">*</sup></label>
+          <input type="text" [(ngModel)]="editTicket.endTime"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Thời gian di chuyển</label>
+          <input type="text" [(ngModel)]="editTicket.travelTime"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Ngày nghỉ</label>
+          <select [(ngModel)]="editTicket.offDay"
+                  class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white">
+            <option value="">Không có</option>
+            <option *ngFor="let d of DAYS" [value]="d">{{d}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Bố trí ghế</label>
+          <select [(ngModel)]="editTicket.seatLayout"
+                  class="mt-1 w-full border border-yellow-300 rounded-lg p-2 bg-white">
+            <option value="2x2">2x2</option>
+            <option value="2x3">2x3</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Loại xe</label>
+          <input type="text" [(ngModel)]="editTicket.type"
+                 class="mt-1 w-full border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white"
+                 placeholder="AC">
+        </div>
+      </div>
+ 
+      <!-- Edit facilities -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Tiện ích</label>
+        <div class="flex gap-2 mb-2">
+          <input type="text" [(ngModel)]="editFacilityInput" (keydown.enter)="addEditFacility()"
+                 class="flex-1 border border-yellow-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400 outline-none bg-white"
+                 placeholder="Thêm tiện ích...">
+          <button (click)="addEditFacility()"
+                  class="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-600">Thêm</button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let f of editTicket.facilities; let i = index"
+                class="bg-yellow-100 text-yellow-800 border border-yellow-300 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+            {{f}}
+            <button (click)="removeEditFacility(i)" class="text-red-500 hover:text-red-700 cursor-pointer ml-1">&times;</button>
+          </span>
+        </div>
+      </div>
+ 
+      <!-- Edit actions -->
+      <div class="flex justify-end gap-3 pt-4 mt-4 border-t border-yellow-200">
+        <button (click)="cancelEdit()"
+                class="px-6 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+          Hủy
+        </button>
+        <button (click)="saveEdit(t.id)" [disabled]="isUpdating"
+                [class]="'px-6 py-2 rounded-lg text-white font-semibold transition flex items-center gap-2 ' +
+                         (isUpdating ? 'bg-gray-400 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 cursor-pointer')">
+          <span *ngIf="isUpdating"><app-icon name="loading"></app-icon> Đang lưu...</span>
+          <span *ngIf="!isUpdating"><app-icon name="check"></app-icon> Lưu thay đổi</span>
+        </button>
+      </div>
+    </div>
+
+    </div>
+    
+</div>

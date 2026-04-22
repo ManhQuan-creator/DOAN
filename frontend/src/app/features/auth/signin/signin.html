@@ -1,0 +1,205 @@
+<div class="flex flex-col md:flex-row min-h-screen bg-gray-100">
+  <div class="w-full md:w-2/4">
+    <img src="assets/auth/background-login.jpg" 
+         alt="Background" 
+         class="object-cover object-left h-full w-full">
+  </div>
+
+  <div class="flex flex-col items-center justify-start w-full md:w-2/4 
+              max-h-screen bg-white py-4 px-4 overflow-y-auto">
+    
+    <!-- Back button -->
+    <div (click)="goHome()" 
+         class="cursor-pointer mr-auto ml-0 md:ml-4 text-gray-500 font-semibold">
+      <i class="text-[12px]"><app-icon name="arrowleft"></app-icon></i>
+      <span class="text-[12px] font-bold"> Quay lại</span>
+    </div>
+
+    <!-- Logo -->
+    <img src="assets/logo/phiethoc-1.png" 
+         alt="Logo" 
+         class="w-32 h-32 object-contain md:mb-6">
+
+    <div class="w-full max-w-md">
+
+      <!--OTP Form (hiện khi đăng nhập Google xong) -->
+      <div *ngIf="showOtpForm" class="flex flex-col gap-4">
+        
+        <!-- Header -->
+        <div class="text-center mb-2">
+          <h3 class="text-lg font-semibold text-gray-700">
+            Xác nhận đăng nhập
+          </h3>
+          <p class="text-sm text-gray-500 mt-1">
+            Mã OTP đã được gửi đến
+          </p>
+          <p class="text-sm font-semibold text-green-600">
+            {{googleEmail}}
+          </p>
+        </div>
+
+        <!-- Error/Success message -->
+        <div *ngIf="message"
+             class="text-red-500 text-sm border border-red-50 p-2 
+                    rounded-lg bg-red-100 flex justify-between">
+          <div>
+            <strong class="text-[13px]">Chú ý: </strong>
+            <span class="text-[12px]">{{message}}</span>
+          </div>
+          <i class="cursor-pointer text-[12px] text-red-500 hover:text-red-700" 
+             (click)="clearMessage()">
+            <app-icon name="close"></app-icon>
+          </i>
+        </div>
+
+        <!-- OTP Input -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-700">
+            Nhập mã OTP <sup class="text-red-500">*</sup>
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="otpCode" 
+            name="otpCode"
+            placeholder="Nhập mã 6 số"
+            maxlength="6"
+            class="w-full p-3 border border-gray-300 rounded-lg 
+                   text-center text-2xl tracking-widest 
+                   focus:outline-none focus:ring-2 focus:ring-green-400
+                   focus:border-green-500">
+        </div>
+
+        <!-- Verify Button -->
+        <button 
+          type="button" 
+          (click)="verifyGoogleOtp()"
+          [disabled]="isVerifyingOtp"
+          [class]="'h-11 w-full rounded-lg font-semibold transition ' +
+                   (!isVerifyingOtp 
+                     ? 'bg-[#23ff52] hover:bg-[#00ff37] text-black cursor-pointer' 
+                     : 'bg-gray-300 text-gray-500 cursor-not-allowed')">
+          <div *ngIf="isVerifyingOtp" class="flex items-center justify-center gap-2">
+            <app-icon name="loading"></app-icon>
+            <span>Đang xác nhận...</span>
+          </div>
+          <span *ngIf="!isVerifyingOtp">Xác nhận OTP</span>
+        </button>
+
+        <!-- Quay lại đăng nhập -->
+        <button 
+          type="button"
+          (click)="showOtpForm = false; message = ''; otpCode = ''"
+          class="text-sm text-gray-500 hover:text-gray-700 
+                 underline text-center cursor-pointer">
+           Quay lại đăng nhập
+        </button>
+
+        <!-- Hướng dẫn -->
+        <p class="text-xs text-gray-400 text-center">
+          Mã OTP có hiệu lực trong 5 phút. 
+          Kiểm tra hộp thư spam nếu không thấy email.
+        </p>
+      </div>
+
+      <!--Form đăng nhập thường (ẩn khi hiện OTP) -->
+      <div *ngIf="!showOtpForm">
+
+        <!-- Error message -->
+        <div *ngIf="message"
+             class="text-red-500 text-sm mb-4 md:mb-6 border border-red-50 
+                    p-1 rounded-lg bg-red-100 flex justify-between">
+          <div>
+            <strong class="text-[13px]">Chú ý: </strong>
+            <span class="text-[12px] text-nowrap">{{message}}</span>
+          </div>
+          <i class="cursor-pointer text-[12px] text-red-500 hover:text-red-700" 
+             (click)="clearMessage()">
+            <app-icon name="close"></app-icon>
+          </i>
+        </div>
+
+        <!-- Google Login Button -->
+        <div class="mb-4">
+          <div id="google-signin-btn" class="flex justify-center"></div>
+        </div>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 border-t border-gray-300 border-dashed"></div>
+          <span class="text-gray-400 text-sm">OR</span>
+          <div class="flex-1 border-t border-gray-300 border-dashed"></div>
+        </div>
+
+        <!-- Login Form -->
+        <form class="flex flex-col gap-4" (ngSubmit)="login()">
+          
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+              Email<sup class="text-red-600">*</sup>
+            </label>
+            <input type="email" id="email" 
+                   [(ngModel)]="email" name="email"
+                   class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md 
+                          shadow-sm focus:outline-none focus:ring-green-500 
+                          focus:shadow-green-300 focus:border-green-500 sm:text-sm"
+                   placeholder="Nhập Email">
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Password<sup class="text-red-600">*</sup>
+            </label>
+            <input type="password" id="password" 
+                   [(ngModel)]="password" name="password"
+                   class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md 
+                          shadow-sm focus:outline-none focus:ring-green-500 
+                          focus:shadow-green-300 focus:border-green-500 sm:text-sm"
+                   placeholder="Nhập Mật Khẩu">
+          </div>
+
+          <!-- Remember + Forgot -->
+          <div class="flex justify-between items-center mt-2">
+            <div class="flex items-center">
+              <input class="cursor-pointer" type="checkbox" id="rememberme">
+              <label for="rememberme" 
+                     class="cursor-pointer ml-2 text-[15px] text-gray-700">
+                Hãy nhớ đến tôi
+              </label>
+            </div>
+            <a routerLink="/forgot-password" 
+               class="text-[15px] text-gray-500">
+              Quên mật khẩu?
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit"
+                  [disabled]="isLoading"
+                  [class]="'bg-[#23ff52] h-10 w-full mt-1 text-black font-semibold rounded ' +
+                           (isLoading 
+                             ? 'opacity-50 cursor-not-allowed' 
+                             : 'hover:bg-[#00ff37] cursor-pointer')">
+            <div *ngIf="isLoading" class="flex items-center justify-center">
+              <app-icon name="loading"></app-icon>
+              <span class="ml-2">Đang đăng nhập...</span>
+            </div>
+            <span *ngIf="!isLoading">Đăng Nhập</span>
+          </button>
+
+          <!-- Sign up link -->
+          <div>
+            <p class="text-sm text-gray-500 mt-2 mb-10">
+              Bạn chưa có tài khoản?
+              <a routerLink="/signup" class="text-blue-500 hover:underline">
+                Đăng Ký
+              </a>
+            </p>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

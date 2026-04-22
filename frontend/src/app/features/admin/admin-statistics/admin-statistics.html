@@ -1,0 +1,108 @@
+<div class="flex flex-col h-full px-2 w-full p-4 pt-2">
+  <!-- Header -->
+  <div class="py-3 flex justify-between px-3 items-center text-center w-full shadow-md bg-white rounded-lg">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-700">Thống kê</h1>
+  </div>
+
+  <div *ngIf="stats" class="mt-4 space-y-6">
+
+    <!-- Thống kê tổng quan -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-blue-500 rounded-xl p-4 text-white">
+        <p class="text-3xl font-bold">{{stats.totalTickets}}</p>
+        <p class="text-sm text-blue-100">Tổng số vé</p>
+      </div>
+      <div class="bg-orange-400 rounded-xl p-4 text-white">
+        <p class="text-3xl font-bold">{{stats.totalBookings}}</p>
+        <p class="text-sm text-orange-100">Tổng số vé đã đặt</p>
+      </div>
+      <div class="bg-green-500 rounded-xl p-4 text-white">
+        <p class="text-3xl font-bold">{{stats.confirmedBookings}}</p>
+        <p class="text-sm text-green-100">Đã xác nhận</p>
+      </div>
+      <div class="bg-red-500 rounded-xl p-4 text-white">
+        <p class="text-3xl font-bold">{{stats.rejectedBookings}}</p>
+        <p class="text-sm text-red-100">Đã từ chối</p>
+      </div>
+    </div>
+
+    <!-- Biểu đồ vé -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-md p-5">
+        <h2 class="text-lg font-bold text-gray-700 mb-4">Thống kê vé đã đặt</h2>
+        <canvas #bookingChart></canvas>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-5">
+        <h2 class="text-lg font-bold text-gray-700 mb-4">Thống kê người dùng</h2>
+        <div class="flex justify-center">
+          <div class="w-64 h-64">
+            <canvas #userChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Biểu đồ doanh thu -->
+    <div class="bg-white rounded-xl shadow-md p-5">
+      <h2 class="text-lg font-bold text-gray-700 mb-4">Thống kê doanh thu</h2>
+      <canvas #revenueChart></canvas>
+    </div>
+
+    <!-- Bảng tóm tắt -->
+    <div class="bg-white rounded-xl shadow-md p-5">
+      <h2 class="text-lg font-bold text-gray-700 mb-4">Tóm tắt</h2>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-100 text-gray-700">
+            <th class="py-3 px-4 text-left">Chỉ số</th>
+            <th class="py-3 px-4 text-right">Giá trị</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="py-3 px-4">Tổng số vé</td>
+            <td class="py-3 px-4 text-right font-semibold text-blue-600">{{stats.totalTickets}}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Tổng đặt vé</td>
+            <td class="py-3 px-4 text-right font-semibold text-orange-500">{{stats.totalBookings}}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Vé đã xác nhận</td>
+            <td class="py-3 px-4 text-right font-semibold text-green-600">{{stats.confirmedBookings}}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Vé đã từ chối</td>
+            <td class="py-3 px-4 text-right font-semibold text-red-600">{{stats.rejectedBookings}}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Vé đang chờ</td>
+            <td class="py-3 px-4 text-right font-semibold text-yellow-600">{{stats.pendingBookings}}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Tổng doanh thu</td>
+            <td class="py-3 px-4 text-right font-semibold text-emerald-600">{{stats.totalRevenue | number}} VNĐ</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Tỷ lệ thành công</td>
+            <td class="py-3 px-4 text-right font-semibold text-purple-600">{{stats.successRate}}%</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">Người dùng hoạt động</td>
+            <td class="py-3 px-4 text-right font-semibold text-green-600">{{stats.activeUsers}}</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4">Người dùng bị khóa</td>
+            <td class="py-3 px-4 text-right font-semibold text-red-600">{{stats.lockedUsers}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="!stats" class="mt-4 p-4 bg-white rounded-lg shadow text-center">
+    <p class="text-gray-500">Đang tải dữ liệu thống kê...</p>
+  </div>
+</div>

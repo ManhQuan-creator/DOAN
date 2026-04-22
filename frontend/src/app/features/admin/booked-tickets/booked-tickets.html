@@ -1,0 +1,64 @@
+<div class="flex flex-col md:px-2 w-full pt-2">
+  <div class="py-3 flex justify-between px-3 items-center text-center w-full shadow-md bg-white md:rounded-lg">
+    <h1 class="text-xl sm:text-3xl font-bold text-gray-700">Tất Cả Vé Đã Đặt</h1>
+    <div class="flex justify-between px-2 items-center w-15 sm:w-30 h-full rounded-lg m-2 bg-[#4f46e5] shadow-md">
+      <i class="text-[14px] sm:text-4xl text-white/20"><app-icon name="ticket"></app-icon></i>
+      <div class="flex flex-col text-white">
+        <span class="font-bold text-[16px] sm:text-2xl">{{bookings.length}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white px-0 md:px-10 py-6">
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-[#1ba000] md:rounded-t-2xl text-[13px]">
+      <thead>
+        <tr class="text-white text-nowrap">
+          <th class="py-2 px-2 text-left">Mã</th>
+          <th class="py-2 px-2 text-left">Mã Vé</th>
+          <th class="py-2 px-2 text-left">Điểm Đi</th>
+          <th class="py-2 px-2 text-left">Điểm Đến</th>
+          <th class="py-2 px-2 text-left">Ngày</th>
+          <th class="py-2 px-2 text-left">Thời Gian</th>
+          <th class="py-2 px-2 text-left">Ghế</th>
+          <th class="py-2 px-2 text-left">Số ĐT</th>
+          <th class="py-2 px-2 text-left">Trạng Thái</th>
+          <th class="py-2 px-2 text-left">Thanh Toán</th>
+          <th class="py-2 px-2 text-left">Giá Vé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings" class="bg-white text-xs text-gray-800 text-nowrap border-b">
+          <td class="py-2 px-2 text-gray-500">{{b.id}}</td>
+          <td class="py-2 px-2 text-blue-600">{{b.bookingCode}}</td>
+          <td class="py-2 px-2 text-green-600">{{b.departure}}</td>
+          <td class="py-2 px-2 text-green-600">{{b.destination}}</td>
+          <td class="py-2 px-2">{{b.dateStart}}</td>
+          <td class="py-2 px-2 text-purple-700 font-mono">{{b.startTime}}</td>
+          <td class="py-2 px-2">
+            <span *ngFor="let s of b.seats; let last = last">{{s.seatName}}<span *ngIf="!last">, </span></span>
+          </td>
+          <td class="py-2 px-2">{{b.passengerPhone || 'Chưa có'}}</td>
+          <td class="py-2 px-2">
+            <span [class]="'px-3 py-1 rounded-full border-2 ' + getStatusClass(b.status)">{{b.statusName}}</span>
+          </td>
+          <td class="py-2 px-2">
+      <span *ngIf="b.paymentStatus === 1"
+        class="px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-400">
+     Đã TT
+      </span>
+      <span *ngIf="b.paymentStatus !== 1"
+        class="px-2 py-1 rounded-full text-xs font-bold bg-red-100 text-red-500 border border-red-300">
+     Chưa TT
+      </span>
+      </td>
+          <td class="py-2 px-2 text-indigo-600">{{b.totalPrice | currencyVnd}}</td>
+        </tr>
+        <tr *ngIf="bookings.length === 0">
+          <td colspan="9" class="text-center text-gray-500 bg-white py-4">Không Có Vé Nào.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

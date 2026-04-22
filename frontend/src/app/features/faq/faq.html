@@ -1,0 +1,22 @@
+<div class="pt-10">
+  <div class="flex flex-col items-center justify-center text-center xl:px-30">
+    <h1 class="font-bold mb-6 text-[18px] sm:text-xl lg:text-3xl">{{ 'FAQS.FAQ_1' | translate }}</h1>
+    <p class="text-[14px] sm:text-[15px] lg:text-[16px]">{{ 'FAQS.FAQ_2' | translate }}</p>
+  </div>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-5 px-10 py-5 bg-[#f9f9f9]">
+    <div *ngFor="let faq of faqs" class="cursor-pointer">
+      <h2 class="font-semibold p-4 border-2 border-[#1db000] text-[14px] sm:text-[15px] lg:text-[16px]"
+          (click)="toggle(faq.id)">
+        <i class="text-[#1db000] pr-2">
+          <app-icon [name]="openId === faq.id ? 'dow' : 'up'"></app-icon>
+        </i>
+        {{ faq.questionKey | translate }}
+      </h2>
+      <div [class]="'overflow-hidden transition-all duration-500 ease-in-out ' +
+                    (openId === faq.id ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0')">
+        <p class="text-gray-700 text-[14px] sm:text-[15px] lg:text-[16px] p-2"> {{ faq.answerKey | translate }}</p>
+      </div>
+    </div>
+  </section>
+</div>

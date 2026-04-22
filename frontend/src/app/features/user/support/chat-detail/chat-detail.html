@@ -1,0 +1,37 @@
+<div class="flex flex-col w-full bg-white h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-400 bg-[#e6f4ea] sticky top-0 z-10 shadow-sm">
+    <div class="flex items-center gap-2">
+      <a routerLink="/user/support/chat" class="md:hidden bg-white py-1 border-green-400 border-dashed border text-center cursor-pointer rounded-xl px-2 text-black text-sm font-semibold">
+        Back
+      </a>
+      <h1 class="text-[15px] md:text-xl font-semibold text-green-700 truncate">{{description || 'Chat Support'}}</h1>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="flex-1 overflow-y-auto px-4 py-4 bg-gray-100">
+    <div *ngFor="let msg of messages" [class]="'flex mb-4 ' + (msg.senderType === 'USER' ? 'justify-end' : 'justify-start')">
+      <div class="max-w-[70%]">
+        <div [class]="'px-4 py-2 rounded-2xl text-sm shadow-md ' +
+                      (msg.senderType === 'USER' ? 'bg-green-500 text-white rounded-br-none' : 'bg-white text-gray-800 rounded-bl-none border')">
+          {{msg.message}}
+        </div>
+        <p [class]="'text-[11px] text-gray-500 mt-1 ' + (msg.senderType === 'USER' ? 'text-right' : '')">
+          {{msg.createdAt}}
+        </p>
+      </div>
+    </div>
+    <div #messagesEnd></div>
+  </div>
+
+  <!-- Input -->
+  <div class="border-t bg-white px-4 py-3 flex items-center gap-3 sticky bottom-0">
+    <input type="text" [(ngModel)]="newMessage" placeholder="Type a message..."
+           (keydown.enter)="send()"
+           class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+    <button (click)="send()" class="p-3 bg-green-500 rounded-full text-white hover:bg-green-600 transition">
+      <app-icon name="send"></app-icon>
+    </button>
+  </div>
+</div>

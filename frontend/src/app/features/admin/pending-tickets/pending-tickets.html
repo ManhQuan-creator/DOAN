@@ -1,0 +1,118 @@
+<div class="flex flex-col md:px-2 w-full pt-2">
+  <div class="py-3 flex justify-between px-3 items-center w-full shadow-md bg-white md:rounded-lg">
+    <h1 class="text-xl sm:text-3xl font-bold text-gray-700">Vé Đang Chờ</h1>
+    <div class="flex gap-2 items-center">
+      <!-- Badge tổng -->
+      <div class="flex justify-between px-2 items-center w-15 sm:w-30 h-full rounded-lg m-2 bg-yellow-500 shadow-md">
+        <div class="flex flex-col text-white">
+          <span class="font-bold text-[16px] sm:text-2xl">{{bookings.length}}</span>
+        </div>
+      </div>
+      <!-- Badge đã thanh toán -->
+      <div class="flex items-center gap-1 bg-green-100 border border-green-500 px-3 py-1 rounded-lg">
+        <span class="text-green-600 font-bold text-sm"> Đã TT:</span>
+        <span class="text-green-700 font-bold">{{paidCount}}</span>
+      </div>
+      <!-- Badge chưa thanh toán -->
+      <div class="flex items-center gap-1 bg-red-100 border border-red-400 px-3 py-1 rounded-lg">
+        <span class="text-red-600 font-bold text-sm"> Chưa TT:</span>
+        <span class="text-red-700 font-bold">{{unpaidCount}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-yellow-50 md:px-10 py-6 min-h-screen">
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-yellow-500 md:rounded-t-2xl text-[13px]">
+      <thead>
+        <tr class="text-white text-nowrap">
+          <th class="py-2 px-2 text-left">Mã vé</th>
+          <th class="py-2 px-2 text-left">Hành khách</th>
+          <th class="py-2 px-2 text-left">Điểm đi</th>
+          <th class="py-2 px-2 text-left">Điểm đến</th>
+          <th class="py-2 px-2 text-left">Ngày</th>
+          <th class="py-2 px-2 text-left">Ghế</th>
+          <th class="py-2 px-2 text-left">Giá vé</th>
+          <th class="py-2 px-2 text-left">Thanh Toán</th> 
+          <th class="py-2 px-2 text-left">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings" 
+            class="text-xs text-gray-800 text-nowrap border-b even:bg-yellow-100"
+            [class.bg-green-50]="b.paymentStatus === 1"
+            [class.bg-white]="b.paymentStatus !== 1">
+          <td class="py-2 px-2 text-blue-600 font-medium">{{b.bookingCode}}</td>
+          <td class="py-2 px-2">
+            <div class="font-medium">{{b.passengerName}}</div>
+            <div class="text-gray-400 text-[11px]">{{b.passengerPhone}}</div>
+          </td>
+          <td class="py-2 px-2 text-green-600">{{b.departure}}</td>
+          <td class="py-2 px-2 text-green-600">{{b.destination}}</td>
+          <td class="py-2 px-2">{{b.dateStart}}</td>
+          <td class="py-2 px-2">
+            <span *ngFor="let s of b.seats; let last = last">
+              {{s.seatName}}<span *ngIf="!last">, </span>
+            </span>
+          </td>
+          <td class="py-2 px-2 text-indigo-600 font-semibold">{{b.totalPrice | currencyVnd}}</td>
+          
+    
+          <td class="py-2 px-2">
+            <span *ngIf="b.paymentStatus === 1"
+                  class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-400">
+              <span></span> Đã TT
+              <span *ngIf="b.paymentMethod" class="text-[10px] text-green-500">({{b.paymentMethod}})</span>
+            </span>
+            <span *ngIf="b.paymentStatus !== 1"
+                  class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600 border border-red-300">
+              <span></span> Chưa TT
+            </span>
+          </td>
+
+            <td class="py-2 px-2">
+            <div class="flex justify-center space-x-2">
+              <div class="relative group">
+                <button
+                  (click)="confirm(b.id, b)" 
+                  [disabled]="!canConfirm(b)"
+                  [ngClass]="{ 
+                    'bg-green-500 hover:bg-green-600 cursor-pointer': canConfirm(b),
+                    'bg-gray-300 cursor-not-allowed opacity-60': !canConfirm(b)
+                  }"
+                  class="text-white px-3 py-1 rounded-md text-xs transition whitespace-nowrap">
+                  <app-icon name="check"></app-icon>
+                  <span></span> Xác Nhận
+                </button>
+
+                <!-- Tooltip khi chưa thanh toán -->
+                <div *ngIf="!canConfirm(b)"
+                     class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1
+                            bg-gray-800 text-white text-xs rounded px-2 py-1
+                            whitespace-nowrap opacity-0 group-hover:opacity-100
+                            transition-opacity z-50 pointer-events-none">
+                  Chờ khách thanh toán
+                </div>
+              </div>
+
+              <button
+                (click)="reject(b.id)"
+                class="bg-red-500 cursor-pointer hover:bg-red-600
+                       text-white px-3 py-1 rounded-md text-xs transition">
+                <app-icon name="cancel"></app-icon>
+                <span></span> Từ Chối
+              </button>
+
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="bookings.length === 0">
+          <td colspan="9" class="text-center bg-gray-100 py-4 text-gray-500">
+            Không Có Vé Đang Chờ.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="w-full h-64 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000068]">
+    <h1 class="font-bold mb-4 text-white text-[20px] sm:text-2xl lg:text-4xl">  {{ 'TICKET_SEARCH.TITLE' | translate }}</h1>
+  </div>
+</div>
+
+<div class="bg-white w-full items-center justify-center px-5 md:px-10 xl:px-30 mt-10 border-b-2 border-dashed border-gray-400">
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700 mb-1">  {{ 'TICKET_SEARCH.TICKET_CODE' | translate }}</label>
+    <input type="text" [(ngModel)]="searchTerm"
+           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              [placeholder]="'TICKET_SEARCH.PLACEHOLDER' | translate">
+  </div>
+  <div class="py-4 justify-center items-center flex">
+    <button [disabled]="isSearching" (click)="search()"
+            [class]="'text-white border border-b-4 w-80 font-medium px-4 py-2 rounded-md ' +
+                     (isSearching ? 'bg-gray-500 border-gray-500 cursor-not-allowed' : 'cursor-pointer bg-green-700 border-green-400')">
+      <span *ngIf="isSearching"><app-icon name="loading"></app-icon> {{ 'TICKET_SEARCH.SEARCHING' | translate }}</span>
+      <span *ngIf="!isSearching"><app-icon name="search"></app-icon> {{ 'TICKET_SEARCH.SEARCH' | translate }}</span>
+    </button>
+  </div>
+</div>
+
+<!-- Result -->
+<div class="bg-white mx-10 my-10 flex justify-center items-center" *ngIf="result">
+  <div class="rounded-2xl bg-white shadow-md border border-dashed overflow-hidden w-full max-w-3xl">
+    <div class="flex flex-col md:flex-row items-start md:items-center p-5 gap-5 bg-gray-50">
+      <div class="flex-1">
+        <h1 class="text-lg font-semibold text-gray-800">{{result.type}} - {{result.departure}} - {{result.destination}}</h1>
+        <p class="text-xs text-gray-500">Code: {{result.bookingCode}}</p>
+      </div>
+      <div class="flex items-center justify-between w-full md:w-auto md:gap-10 text-sm">
+        <div class="text-center">
+          <p class="font-medium">{{result.startTime}}</p>
+          <p class="text-xs text-gray-500">{{result.departure}}</p>
+        </div>
+        <div class="text-center">
+          <app-icon name="arrow-right"></app-icon>
+          <p class="text-xs text-gray-500">{{result.travelTime}}</p>
+        </div>
+        <div class="text-center">
+          <p class="font-medium">{{result.endTime}}</p>
+          <p class="text-xs text-gray-500">{{result.destination}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-100 p-3 text-sm mx-4 mb-4 rounded-lg">
+      <div class="font-semibold">{{result.passengerName}}</div>
+      <div class="mt-2 border-t pt-2 flex justify-between">
+        <div>Seats: <span *ngFor="let s of result.seats; let last = last" class="text-green-600">{{s.seatName}}<span *ngIf="!last">, </span></span></div>
+        <div class="font-bold text-green-600">{{result.totalPrice | currencyVnd}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!result && searchTerm" class="text-center text-gray-500 py-10">
+  <app-icon name="ticket"></app-icon>
+  <p class="text-lg">{{ 'TICKET_SEARCH.NOT_FOUND' | translate }}</p>
+</div>

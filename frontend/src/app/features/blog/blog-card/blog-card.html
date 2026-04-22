@@ -1,0 +1,35 @@
+<div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 group">
+  <!-- Image -->
+  <a [routerLink]="'/blog/' + post.path" class="block overflow-hidden">
+    <img [src]="post.image" [alt]="post.titleKey"
+         class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
+  </a>
+
+  <!-- Content -->
+  <div class="p-5">
+    <!-- Date -->
+    <div class="flex items-center gap-2 text-gray-400 text-sm mb-3">
+      <i class="text-green-500 fa-solid fa-calendar-days"></i>
+      <span>{{ post.date }}</span>
+    </div>
+
+    <!-- Title -->
+    <a [routerLink]="'/blog/' + post.path">
+      <h2 class="text-lg font-bold text-gray-800 line-clamp-2 hover:text-green-600 transition-colors duration-300 mb-2">
+        {{ post.titleKey }}
+      </h2>
+    </a>
+
+    <!-- Description -->
+    <p class="text-gray-500 text-sm line-clamp-2 mb-4">
+      {{ post.contentKey }}
+    </p>
+
+    <!-- Read More -->
+    <a [routerLink]="'/blog/' + post.path"
+       class="inline-flex items-center gap-1 text-green-600 text-sm font-semibold hover:text-green-700 transition-colors duration-300">
+      Đọc thêm
+      <i class="fa-regular fa-square-caret-right"></i>
+    </a>
+  </div>
+</div>

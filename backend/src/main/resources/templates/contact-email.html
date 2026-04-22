@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liên hệ mới</title>
+</head>
+<body>
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #1ba000; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;"> Phiệt Học Bus</h1>
+    </div>
+    <div style="padding: 30px;">
+        <h2 style="color: #333;">Tin nhắn liên hệ mới</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #f5f5f5;">
+                <td style="padding: 10px; font-weight: bold; width: 120px;">Họ tên:</td>
+                <td style="padding: 10px;" th:text="${fromName}">Tên</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; font-weight: bold;">Email:</td>
+                <td style="padding: 10px;">
+                    <a th:href="'mailto:' + ${fromEmail}" th:text="${fromEmail}">email</a>
+                </td>
+            </tr>
+            <tr style="background: #f5f5f5;">
+                <td style="padding: 10px; font-weight: bold;">Chủ đề:</td>
+                <td style="padding: 10px;" th:text="${subject}">Chủ đề</td>
+            </tr>
+        </table>
+        <div style="margin-top: 20px; padding: 15px;
+                    background: #f9f9f9; border-left: 4px solid #1ba000;">
+            <strong>Nội dung:</strong>
+            <p style="margin-top: 10px; white-space: pre-wrap;"
+               th:text="${message}">Nội dung</p>
+        </div>
+    </div>
+    <div style="background: #f9f9f9; padding: 15px; text-align: center;">
+        <p style="color: #999; font-size: 12px; margin: 0;">
+            2026 Phiệt Học Bus. Email tự động từ website.
+        </p>
+    </div>
+</div>
+</body>
+</html>

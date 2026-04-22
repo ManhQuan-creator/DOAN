@@ -1,0 +1,52 @@
+<div class="w-full h-64 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000041]">
+    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-white">{{ 'SUPPORT.SP1' | translate }}</h1>
+  </div>
+</div>
+
+<div class="bg-[#ececec] sm:px-4 md:px-10 py-6">
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-[#1ba000] text-sm sm:rounded-t-2xl">
+      <thead>
+        <tr class="text-white text-nowrap">
+          <th class="py-2 px-4 text-start">{{ 'SUPPORT.SP2' | translate }}</th>
+          <th class="py-2 px-2">{{ 'SUPPORT.SP3' | translate }}</th>
+          <th class="py-2 px-4">{{ 'SUPPORT.SP4' | translate }}</th>
+          <th class="py-2 px-4">{{ 'SUPPORT.SP5' | translate }}</th>
+          <th class="py-2 px-4 text-end">{{ 'SUPPORT.SP6' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let chat of chats" class="text-black bg-white text-nowrap">
+          <td class="py-2 px-4 text-start">{{chat.description}}</td>
+          <td class="py-2 px-4 text-center">
+            <span [class]="'border px-2 py-1 rounded-[10px] text-[12px] font-bold ' +
+                  (chat.status === 1 ? 'border-green-600 text-green-600 bg-green-100' : 'border-red-600 text-red-600 bg-red-100')">
+              {{chat.statusName}}
+            </span>
+          </td>
+          <td class="py-2 px-4 text-center">
+            <span [class]="'border px-2 py-1 rounded-[10px] text-[12px] font-bold ' +
+                  (chat.priority === 1 ? 'border-red-600 text-red-600 bg-red-100' :
+                   chat.priority === 2 ? 'border-yellow-600 text-yellow-600 bg-yellow-100' :
+                   'border-green-600 text-green-600 bg-green-100')">
+              {{chat.priorityName}}
+            </span>
+          </td>
+          <td class="py-2 px-4 text-center font-medium text-gray-500">{{chat.updatedAt}}</td>
+          <td class="py-2 px-5 text-end cursor-pointer">
+            <a [routerLink]="'/user/support/chat/' + chat.id + '/' + chat.description">
+              <i class="bg-[#1ba000] text-[15px] py-2 px-3 rounded-[10px] text-white">
+                <app-icon name="computer"></app-icon>
+              </i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngIf="chats.length === 0">
+          <td colspan="5" class="text-center py-4 bg-gray-300 text-gray-500">{{ 'SUPPORT.SP7' | translate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

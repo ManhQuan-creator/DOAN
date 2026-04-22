@@ -1,0 +1,36 @@
+<nav class="flex flex-col w-full bg-white h-full">
+  <div class="flex items-center justify-between px-3 md:px-6 py-3 bg-green-500 text-white sticky top-0 z-10 shadow">
+    <a routerLink="/user/support-ticket" class="bg-white text-center cursor-pointer rounded-2xl px-3 py-1 text-black text-sm font-semibold">
+      Back
+    </a>
+    <h3 class="font-bold text-lg flex mx-2 items-center text-nowrap gap-2">
+      <app-icon name="chat"></app-icon> Chats
+    </h3>
+  </div>
+
+  <ul class="flex flex-col px-2 py-2 overflow-y-auto h-[calc(100vh-64px)]">
+    <li *ngFor="let chat of chats" class="mb-1">
+      <a [routerLink]="'/user/support/chat/' + chat.id + '/' + chat.description"
+         class="flex items-center gap-3 p-3 rounded-xl transition hover:bg-gray-100">
+        <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">
+          <app-icon name="user"></app-icon>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center">
+            <h4 class="font-semibold text-gray-800 text-sm truncate">{{chat.description}}</h4>
+          </div>
+          <div class="flex justify-between items-center mt-1 text-gray-600 text-sm">
+            <span class="truncate w-[75%] text-xs">{{chat.lastMessage || 'No messages'}}</span>
+            <span class="text-[11px]">{{chat.updatedAt}}</span>
+          </div>
+        </div>
+      </a>
+    </li>
+    <a *ngIf="chats.length === 0" routerLink="/user/ticket/createnew">
+      <li class="p-5 bg-gray-100 hover:bg-gray-200 transition rounded-xl text-gray-600 flex items-center justify-center mt-10">
+        <app-icon name="plus"></app-icon>
+        <span class="text-[16px] ml-2">Create new chat</span>
+      </li>
+    </a>
+  </ul>
+</nav>

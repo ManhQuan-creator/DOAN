@@ -1,0 +1,51 @@
+<aside [class]="'md:h-screen top-0 left-0 bg-gray-100 flex flex-col justify-between transition-all duration-500 z-50 ' +
+                (collapsed ? 'md:w-12' : 'md:w-80')">
+  <div>
+    <div class="flex items-center justify-between p-4 border-b cursor-pointer">
+      <div class="flex items-center justify-center gap-2" (click)="collapsed = false">
+        <img src="assets/logo/phiethoc-1.png" alt="Logo" class="h-10 object-contain">
+        <span [class]="'transition-all duration-300 text-nowrap text-[#1ba000] text-xl font-bold overflow-hidden text-ellipsis inline-block ' +
+                       (collapsed ? 'md:max-w-[0px] md:overflow-hidden' : 'md:max-w-[100px]')">ADMIN</span>
+      </div>
+      <button (click)="toggleCollapse()" class="text-gray-500 hover:text-gray-700 max-md:hidden">
+        <app-icon [name]="collapsed ? 'circle-right' : 'circle-left'"></app-icon>
+      </button>
+      <button class="text-gray-500 hover:text-gray-700 md:hidden" (click)="mobileOpen = !mobileOpen">
+        <app-icon [name]="mobileOpen ? 'up' : 'dow'"></app-icon>
+      </button>
+    </div>
+
+    <nav [class]="'flex flex-col mt-2 overflow-hidden transition-all duration-500 ease-in-out ' +
+                  (mobileOpen ? 'max-md:max-h-[500px] max-md:opacity-100' : 'max-md:max-h-0 max-md:opacity-0') +
+                  ' md:max-h-[calc(100vh-200px)] md:opacity-100 md:overflow-y-auto'">
+      <div *ngFor="let item of nav" class="relative group">
+        <a [routerLink]="item.path" routerLinkActive="bg-green-200 text-[#1ba000]"
+           class="flex py-4 items-center gap-3 px-3 rounded hover:bg-green-100 transition-all text-gray-700"
+           (click)="mobileOpen = false; collapsed = false">
+          <app-icon [name]="item.icon"></app-icon>
+          <span [class]="'transition-all duration-300 overflow-hidden text-nowrap text-ellipsis inline-block ' +
+                         (collapsed ? 'md:max-w-[0px]' : 'md:max-w-full')">{{item.name}}</span>
+          <div *ngIf="item.sub" class="ml-auto" (click)="toggleSub(item.id, $event)">
+            <app-icon [name]="openSub === item.id ? 'up' : 'dow'"></app-icon>
+          </div>
+        </a>
+        <div *ngIf="item.sub && openSub === item.id"
+             class="overflow-hidden transition-all duration-500 ease-in-out max-h-40 opacity-100">
+          <div class="bg-white shadow-sm rounded mt-1">
+            <a *ngFor="let sub of item.sub" [routerLink]="sub.path" routerLinkActive="bg-green-200 text-[#1ba000]"
+               class="block px-4 py-2 text-gray-700 hover:bg-green-100"
+               (click)="mobileOpen = false">{{sub.name}}</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="p-4 border-t max-md:hidden">
+    <a (click)="logout()" class="flex items-center gap-2 text-red-500 hover:text-red-600 cursor-pointer">
+      <app-icon name="logout"></app-icon>
+      <span [class]="'transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis inline-block ' +
+                     (collapsed ? 'md:max-w-[0px]' : 'md:max-w-[100px]')">Đăng Xuất</span>
+    </a>
+  </div>
+</aside>

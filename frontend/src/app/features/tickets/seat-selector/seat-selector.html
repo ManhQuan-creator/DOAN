@@ -1,0 +1,70 @@
+<div class="border border-gray-500 rounded-[10px] p-2">
+  <!-- Front label -->
+  <div class="flex justify-center mt-[-18px] items-center gap-2">
+    <p class="bg-gray-300 px-5 text-[12px] text-gray-500">
+      {{ frontLabel }}
+    </p>
+  </div>
+
+  <!-- Seat grid -->
+  <div class="py-5">
+    <ng-container *ngIf="layout === '2x2'">
+      <!-- Layout 2x2: 2 ghế bên trái, lối đi, 2 ghế bên phải -->
+      <div class="grid gap-2 px-2" style="grid-template-columns: 1fr 1fr 0.5fr 1fr 1fr;">
+        <ng-container *ngFor="let seat of seats; let i = index">
+          <!-- Lối đi sau cột 2 -->
+          <ng-container *ngIf="i % 4 === 2">
+            <div class="flex items-center justify-center">
+              <div class="h-full w-px bg-gray-300 mx-auto"></div>
+            </div>
+          </ng-container>
+
+          <div (click)="toggleSeat(seat)"
+               [class]="getSeatClass(seat)"
+               class="w-full h-12 flex flex-col items-center justify-center border rounded cursor-pointer transition-colors duration-200">
+            <span class="text-[14px] font-medium">{{ seat.name }}</span>
+            <div class="bg-current opacity-30 h-0.5 w-6 rounded-full mt-0.5"></div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <!-- Layout khác (fallback grid 4 cột) -->
+    <ng-container *ngIf="layout !== '2x2'">
+      <div class="grid grid-cols-4 gap-2 px-2">
+        <div *ngFor="let seat of seats"
+             (click)="toggleSeat(seat)"
+             [class]="getSeatClass(seat)"
+             class="w-full h-12 flex flex-col items-center justify-center border rounded cursor-pointer transition-colors duration-200">
+          <span class="text-[14px] font-medium">{{ seat.name }}</span>
+          <div class="bg-current opacity-30 h-0.5 w-6 rounded-full mt-0.5"></div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Rear label -->
+  <div class="flex justify-center mb-[-17px] items-center gap-2">
+    <p class="bg-gray-300 px-5 text-[12px] text-gray-500">
+      {{ rearLabel }}
+    </p>
+  </div>
+</div>
+
+<!-- Legend -->
+<div class="py-6">
+  <div class="grid grid-cols-3 gap-4">
+    <div class="flex items-center gap-2">
+      <div class="bg-white border border-gray-400 rounded-[3px] h-5 w-10"></div>
+      <p class="text-[12px] text-gray-500">Còn trống</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-[#008428] rounded-[3px] h-5 w-10"></div>
+      <p class="text-[12px] text-gray-500">Đã chọn</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-[#767676] rounded-[3px] h-5 w-10"></div>
+      <p class="text-[12px] text-gray-500">Đã đặt</p>
+    </div>
+  </div>
+</div>

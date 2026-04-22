@@ -1,0 +1,66 @@
+<footer class="bg-gray-800 grid grid-cols-5 max-[900px]:grid-cols-2 max-[450px]:grid-cols-1 px-5 text-[#f5f5f5] py-4">
+  <!-- Info -->
+  <section class="flex flex-col col-span-2 max-[900px]:col-span-1 max-[900px]:py-5 gap-4">
+    <img src="assets/logo/DAI DIEN.png" class="h-20 w-auto max-w-xs" alt="">
+    <span class="pr-5">
+      
+    {{ 'FOOTER.KET' | translate }}
+    </span>
+    <span class="flex gap-4 text-2xl">
+      <app-icon name="facebook"></app-icon>
+      <app-icon name="twitter"></app-icon>
+      <app-icon name="instagram"></app-icon>
+      <app-icon name="youtube"></app-icon>
+    </span>
+  </section>
+
+  <!-- Useful Links -->
+  <section class="w-full max-[900px]:py-5">
+    <div class="mb-5">
+      <h1 class="font-bold text-[22px] text-[#12cb62]">{{ 'FOOTER.USEFUL_LINKS' | translate }}</h1>
+      <div class="items-center">
+        <div class="w-20 h-0.5 bg-[#0E9E4Db3] mb-1"></div>
+        <div class="w-10 h-0.5 bg-[#0E9E4Db3]"></div>
+      </div>
+    </div>
+    <ul class="flex flex-col gap-4">
+      <a routerLink="/about"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'HEADER.ABOUT' | translate }}</li></a>
+      <a routerLink="/faqs"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'HEADER.FAQS' | translate }}</li></a>
+      <a routerLink="/blog"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'HEADER.BLOG' | translate }}</li></a>
+      <a routerLink="/contact"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'HEADER.CONTACT' | translate }}</li></a>
+    </ul>
+  </section>
+
+  <!-- Policies -->
+  <section class="w-full max-[900px]:py-5">
+    <div class="mb-5">
+      <h1 class="font-bold text-[22px] text-[#12cb62]">{{ 'FOOTER.POLICIES' | translate }}</h1>
+      <div class="items-center">
+        <div class="w-20 h-0.5 bg-[#0E9E4Db3] mb-1"></div>
+        <div class="w-10 h-0.5 bg-[#0E9E4Db3]"></div>
+      </div>
+    </div>
+    <ul class="flex flex-col gap-4">
+      <a routerLink="viserbus/policy/privacy-policy"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'FOOTER.PRIVACY_POLICY' | translate }}</li></a>
+      <a routerLink="viserbus/policy/terms-of-service"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'FOOTER.TERMS_OF_SERVICE' | translate }}</li></a>
+      <a routerLink="viserbus/policy/ticket-policy"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'FOOTER.TICKET_POLICY' | translate }}</li></a>
+      <a routerLink="viserbus/policy/refund-policy"><li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="arrow-right"></app-icon> {{ 'FOOTER.REFUND_POLICY' | translate }}</li></a>
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section class="w-full max-[900px]:py-5">
+    <div class="mb-5">
+      <h1 class="font-bold text-[22px] text-[#12cb62]">{{ 'FOOTER.CONTACT_US' | translate }}</h1>
+      <div class="items-center">
+        <div class="w-20 h-0.5 bg-[#0E9E4Db3] mb-1"></div>
+        <div class="w-10 h-0.5 bg-[#0E9E4Db3]"></div>
+      </div>
+    </div>
+    <ul class="flex flex-col gap-4">
+      <li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="gps"></app-icon>Tien Hai, Thai Binh, VietNam</li>
+      <li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="phone"></app-icon> +84 983085420</li>
+      <li class="hover:text-[#1ba000] transition-all duration-300 cursor-pointer"><app-icon name="email"></app-icon> manhquan0415&#64;gmail.com</li>
+    </ul>
+  </section>
+</footer>

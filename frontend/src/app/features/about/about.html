@@ -1,0 +1,43 @@
+<div class="w-full h-64 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000068]">
+    <h1 class="font-bold mb-4 text-white text-[20px] sm:text-2xl lg:text-4xl"> {{ 'ABOUT.ABOUT_1' | translate }}</h1>
+  </div>
+</div>
+
+<section class="grid grid-cols-1 gap-5 px-5 py-5 bg-[#f9f9f9] xl:px-[20%]">
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="p-1">
+      <strong class="items-center justify-center flex md:justify-start text-[18px] sm:text-xl lg:text-3xl">
+        {{ 'ABOUT.ABOUT_2' | translate }}
+      </strong>
+      <p class="text-[14px] sm:text-[15px] lg:text-[16px]">
+         {{ 'ABOUT.ABOUT_3' | translate }}
+      </p>
+    </div>
+    <div>
+      <img src="assets/about/phiethoc.png" alt="About Bus">
+    </div>
+  </div>
+
+  <div>
+    <strong class="text-[18px] sm:text-xl lg:text-3xl">{{ 'ABOUT.ABOUT_1' | translate }} </strong>
+    <span class="text-[14px] sm:text-[15px] px-2 lg:text-[16px]">
+    {{ 'ABOUT.ABOUT_4' | translate }}
+    </span>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <strong class="text-[18px] sm:text-xl lg:text-3xl">{{ 'ABOUT.ABOUT_5' | translate }}</strong>
+      <p class="text-[14px] sm:text-[15px] lg:text-[16px] ">
+   {{ 'ABOUT.ABOUT_6' | translate }}
+  </p>
+    <ul class="list-disc pl-5 text-[14px] sm:text-[15px] lg:text-[16px]">
+      <li *ngFor="let benefit of benefitKeys">{{ benefit | translate }}</li>
+    </ul>
+  </div>
+
+  <div>
+    <app-faq></app-faq>
+  </div>
+</section>

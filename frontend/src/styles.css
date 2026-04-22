@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+@keyframes slideDown {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes busMove {
+  0% { right: -20px; }
+  100% { right: 100%; }
+}
+
+.bus-animation {
+  animation: busMove 10s ease-out infinite;
+  position: absolute;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.4s ease-in-out;
+}

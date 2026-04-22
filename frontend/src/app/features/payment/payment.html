@@ -1,0 +1,199 @@
+
+<div class="min-h-screen py-10 px-4 flex items-center justify-center bg-gray-100 relative">
+  <div class="absolute inset-0 bg-center bg-cover min-h-screen"
+       style="background-image: url('assets/background.jpg')"></div>
+  <div class="absolute inset-0 backdrop-blur-md bg-black/20"></div>
+
+  <!-- HẾT HẠN -->
+  <div *ngIf="isExpired"
+       class="relative z-10 bg-white rounded-2xl shadow-lg p-10 text-center max-w-md w-full">
+    
+    <h2 class="text-2xl font-bold text-red-600 mb-3">Hết hạn thanh toán!</h2>
+    <p class="text-gray-600 mb-6">
+      Bạn đã không thanh toán trong vòng <strong>2 phút</strong>.
+      Ghế đã bị <strong class="text-red-500">tự động từ chối</strong>.
+    </p>
+    <button (click)="goToBuyTickets()"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-xl cursor-pointer transition">
+      Đặt vé mới
+    </button>
+  </div>
+
+  <!-- THANH TOÁN THÀNH CÔNG -->
+  <div *ngIf="paymentSuccess && !isExpired"
+       class="relative z-10 bg-white rounded-2xl shadow-lg p-10 text-center max-w-md w-full">
+  
+    <h2 class="text-2xl font-bold text-green-600 mb-3">Thanh toán thành công!</h2>
+    <p class="text-gray-600 mb-2">Ghế của bạn đã được xác nhận.</p>
+    <p *ngIf="vnpayResult === 'success'" class="text-green-600 text-sm mb-6">
+      Thanh toán VNPay thành công!
+    </p>
+    <button (click)="goToHistory()"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-xl cursor-pointer transition">
+      Xem lịch sử đặt vé
+    </button>
+  </div>
+
+  <!-- VNPay THẤT BẠI -->
+  <div *ngIf="vnpayResult === 'failed' && !paymentSuccess && !isExpired && booking"
+       class="relative z-10 bg-white rounded-2xl shadow-lg p-10 text-center max-w-md w-full">
+  
+    <h2 class="text-2xl font-bold text-red-600 mb-3">Thanh toán thất bại!</h2>
+    <p class="text-gray-600 mb-6">Giao dịch VNPay không thành công. Vui lòng thử lại.</p>
+    <div class="flex gap-3 justify-center">
+      <button (click)="vnpayResult = null"
+              class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-xl cursor-pointer transition">
+        Thử lại
+      </button>
+      <button (click)="goToBuyTickets()"
+              class="bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl cursor-pointer transition">
+        Đặt vé mới
+      </button>
+    </div>
+  </div>
+
+  <!-- FORM THANH TOÁN CHÍNH -->
+  <div *ngIf="booking && !isExpired && !paymentSuccess && vnpayResult !== 'failed'"
+       class="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-lg bg-white relative z-10 w-full">
+
+    <!-- Header với countdown -->
+    <div class="bg-green-500 py-4 px-6 flex items-center justify-between">
+      <h2 class="text-2xl md:text-3xl font-bold text-white">Thanh Toán VNPay</h2>
+      <div class="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
+        <span class="text-white text-sm font-medium">Hết hạn sau:</span>
+        <span [class]="'text-2xl font-mono font-bold ' + countdownClass">
+          {{ countdownDisplay }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Cảnh báo thời gian -->
+    <div *ngIf="remainingSeconds <= 120 && remainingSeconds > 0"
+         class="bg-red-50 border-l-4 border-red-500 px-6 py-3 flex items-center gap-2">
+      <p class="text-red-600 font-medium text-sm">
+         Còn <strong>{{ countdownDisplay }}</strong> để hoàn tất thanh toán!
+      </p>
+    </div>
+
+    <div class="flex flex-col md:flex-row">
+      <!-- Thông tin vé -->
+      <div class="w-full md:w-1/2 p-6 space-y-4 border-r border-gray-200">
+        <strong class="text-gray-800 text-lg block"> Thông tin chuyến đi</strong>
+        <div class="bg-gray-50 border rounded-xl p-4 space-y-3">
+          <div class="text-lg font-bold">
+            {{booking.type}} - {{booking.departure}} → {{booking.destination}}
+          </div>
+          <div class="flex justify-between text-center border-t border-b py-3 border-dashed">
+            <div>
+              <div class="text-sm text-gray-500">Khởi hành</div>
+              <div class="text-xl font-bold">{{booking.startTime}}</div>
+              <div class="text-sm">{{booking.departure}}</div>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+              <div class="text-xs text-gray-500">{{booking.travelTime}}</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Đến</div>
+              <div class="text-xl font-bold">{{booking.endTime}}</div>
+              <div class="text-sm">{{booking.destination}}</div>
+            </div>
+          </div>
+          <!-- Ghế -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Ghế:</span>
+            <span class="font-medium">
+              <span *ngFor="let s of booking.seats; let last = last">
+                {{s.seatName}}<span *ngIf="!last">, </span>
+              </span>
+            </span>
+          </div>
+          <!-- Ngày -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">Ngày:</span>
+            <span class="font-medium">{{booking.dateStart}}</span>
+          </div>
+          <!-- Tổng tiền -->
+          <div class="flex justify-between items-center border-t pt-3">
+            <span class="font-bold">Tổng tiền:</span>
+            <span class="text-xl font-bold text-green-600">{{booking.totalPrice | currencyVnd}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phần thanh toán VNPay -->
+      <div class="w-full md:w-1/2 p-6 space-y-4">
+        <strong class="text-gray-800 text-lg block">💳 Thanh toán qua VNPay</strong>
+
+        <!-- Nhập số điện thoại nếu chưa có -->
+        <div *ngIf="!hasPhone" class="bg-yellow-50 border border-yellow-400 rounded-xl p-4">
+          <p class="text-yellow-700 font-medium text-sm mb-3">
+             Bạn chưa cập nhật số điện thoại. Vui lòng nhập để tiếp tục thanh toán:
+          </p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Số điện thoại <sup class="text-red-500">*</sup>
+          </label>
+          <input
+            type="tel"
+            [(ngModel)]="phoneInput"
+            placeholder="Nhập số điện thoại (10 số)"
+            maxlength="10"
+            class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-400 outline-none"
+            [class.border-red-500]="phoneError">
+          <p *ngIf="phoneError" class="text-red-500 text-xs mt-1">{{phoneError}}</p>
+        </div>
+
+        <!-- Hiển thị phone đã có -->
+        <div *ngIf="hasPhone" class="bg-green-50 border border-green-400 rounded-xl p-4">
+          <p class="text-green-700 text-sm">
+             Số điện thoại: <strong>{{userPhone}}</strong>
+          </p>
+        </div>
+
+        <!-- Logo VNPay -->
+        <div class="flex items-center justify-center gap-3 py-4 border rounded-xl bg-gray-50">
+          <img src="https://sandbox.vnpayment.vn/paymentv2/images/vnpay/logo-vnpay.svg" 
+               alt="VNPay" class="h-10" 
+               onerror="this.style.display='none'">
+          <div class="text-center">
+            <div class="text-lg font-bold text-red-600">VNPay Sandbox</div>
+            <div class="text-xs text-gray-500">Thanh toán an toàn & bảo mật</div>
+          </div>
+        </div>
+
+        <!-- Hướng dẫn -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700">
+          <p class="font-medium mb-1">Hướng dẫn:</p>
+          <ol class="list-decimal list-inside space-y-1 text-xs">
+            <li>Nhấn "Thanh toán VNPay" bên dưới</li>
+            <li>Chọn ngân hàng bất kỳ (VD: NCB)</li>
+            <li>Số thẻ: <strong>	9704198526191432198</strong></li>
+            <li>Tên chủ thẻ: <strong>NGO MANH QUAN</strong></li>
+            <li>Ngày phát hành: <strong>07/15</strong></li>
+            <li>OTP: <strong>123456</strong></li>
+          </ol>
+        </div>
+
+        <!-- Nút thanh toán -->
+        <button
+          (click)="payWithVnPay()"
+          [disabled]="isPaymentLoading"
+          [class]="'w-full py-4 rounded-xl text-white font-bold text-lg transition flex items-center justify-center gap-2 ' +
+            (!isPaymentLoading ? 'bg-red-600 hover:bg-red-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed')">
+          <span *ngIf="isPaymentLoading"> Đang xử lý...</span>
+          <span *ngIf="!isPaymentLoading"> Thanh toán VNPay</span>
+        </button>
+
+        <!-- Nút hủy -->
+        <button
+          (click)="cancel()"
+          class="w-full py-2 rounded-xl border border-red-400 text-red-600 font-medium hover:bg-red-50 cursor-pointer transition">
+          Hủy vé
+        </button>
+
+        <p class="text-xs text-gray-400 text-center">
+           Thanh toán được bảo mật bởi VNPay
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

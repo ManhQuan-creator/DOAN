@@ -1,0 +1,32 @@
+ <div class="flex flex-col md:px-2 w-full pt-2">
+      <div class="py-3 flex justify-between px-3 items-center w-full shadow-md bg-white md:rounded-lg">
+        <h1 class="text-xl sm:text-3xl font-bold text-gray-700">Vé Đã Từ Chối</h1>
+        <div class="bg-red-500 shadow-md px-4 py-2 rounded-lg text-white font-bold">{{bookings.length}}</div>
+      </div>
+    </div>
+    <div class="bg-red-50 md:px-10 py-6 min-h-screen">
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-red-500 md:rounded-t-2xl text-[13px]">
+          <thead><tr class="text-white text-nowrap">
+            <th class="py-2 px-2 text-left">Mã Vé</th>
+            <th class="py-2 px-2 text-left">Tuyến Đường</th>
+            <th class="py-2 px-2 text-left">Ngày</th>
+            <th class="py-2 px-2 text-left">Giá Vé</th>
+            <th class="py-2 px-2 text-left">Hành Động</th>
+          </tr></thead>
+          <tbody>
+            <tr *ngFor="let b of bookings" class="bg-white text-xs text-gray-800 text-nowrap even:bg-red-100">
+              <td class="py-2 px-2 text-blue-600">{{b.bookingCode}}</td>
+              <td class="py-2 px-2">{{b.departure}} → {{b.destination}}</td>
+              <td class="py-2 px-2">{{b.dateStart}}</td>
+              <td class="py-2 px-2 text-indigo-600">{{b.totalPrice | currencyVnd}}</td>
+              <td class="py-2 px-2">
+                <button (click)="delete(b.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs cursor-pointer">
+                  <app-icon name="trash"></app-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>

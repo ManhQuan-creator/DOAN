@@ -1,0 +1,156 @@
+<div class="w-full h-64 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-[#00000068]">
+    <h1 class="text-4xl font-bold mb-4 text-white">{{ 'CONTACT.TITLE' | translate }}</h1>
+  </div>
+</div>
+
+<section class="flex flex-col md:gap-5 gap-2 xl:px-[15%] bg-[#f9f9f9]">
+  <div class="flex py-10 flex-col gap-3 items-center">
+    <strong class="text-[30px] font-bold">{{ 'CONTACT.CONNECT' | translate }}</strong>
+    <span class="text-[16px] px-5 text-gray-600">{{ 'CONTACT.CONNECT_DESC' | translate }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 px-5">
+    <div class="w-full h-30 flex border py-5 px-5 border-[#0e9e4d] gap-3 rounded-2xl">
+      <i class="text-2xl text-[#0e9e4d] pt-1"><app-icon name="gps"></app-icon></i>
+      <div>
+        <strong class="text-[20px]">{{ 'CONTACT.ADDRESS' | translate }}</strong>
+        <p class="text-[16px] text-gray-400">22 Đuong 14 - 10, TT. Tien Hai, Tien Hai, Thai Binh, Viet Nam</p>
+      </div>
+    </div>
+    <div class="w-full h-30 flex border py-5 px-5 border-[#0e9e4d] gap-3 rounded-2xl">
+      <i class="text-2xl text-[#0e9e4d] pt-1"><app-icon name="phone"></app-icon></i>
+      <div>
+        <strong class="text-[20px]">{{ 'CONTACT.CALL_US' | translate }}</strong>
+        <p class="text-[16px] text-gray-400">+84 983085420</p>
+      </div>
+    </div>
+    <div class="w-full h-30 flex border py-5 px-5 border-[#0e9e4d] gap-3 rounded-2xl">
+      <i class="text-2xl text-[#0e9e4d] pt-1"><app-icon name="email"></app-icon></i>
+      <div>
+        <strong class="text-[20px]">Email</strong>
+        <p class="text-[16px] text-gray-400">manhquan0415&#64;gmail.com</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 px-5 md:py-5 mb-1">
+    <!-- <div class="w-full h-full p-5 shadow-lg rounded-lg">
+      <form class="flex flex-col md:gap-3" (ngSubmit)="submit()">
+        <strong>{{ 'CONTACT.QUESTION' | translate }}</strong>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block mt-1 md:mt-4">{{ 'CONTACT.FULLNAME' | translate }} <sup class="text-red-500">*</sup></label>
+            <input type="text" [(ngModel)]="contactName" name="name" class="w-full p-2 border border-gray-300 rounded-lg" [placeholder]="'CONTACT.FULLNAME' | translate">
+          </div>
+          <div>
+            <label class="block mt-1 md:mt-4">{{ 'AUTH.EMAIL' | translate }} <sup class="text-red-500">*</sup></label>
+            <input type="email" [(ngModel)]="contactEmail" name="email" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Email">
+          </div>
+        </div>
+        <div>
+          <label class="block mt-1 md:mt-4">{{ 'CONTACT.SUBJECT' | translate }}<sup class="text-red-500">*</sup></label>
+          <input type="text" [(ngModel)]="contactSubject" name="subject" class="w-full p-2 border border-gray-300 rounded-lg" [placeholder]="'CONTACT.SUBJECT' | translate">
+        </div>
+        <div>
+          <label class="block mt-1 md:mt-4">{{ 'CONTACT.CONTENT' | translate }} <sup class="text-red-500">*</sup></label>
+          <textarea [(ngModel)]="contactMessage" name="message" class="w-full p-2 border border-gray-300 rounded-lg" [placeholder]="'CONTACT.CONTENT' | translate" rows="5"></textarea>
+        </div>
+        <button type="submit" class="bg-[#0e9e4d] text-white px-5 py-2 rounded-lg mt-4 hover:bg-[#0e9e4d]/80 transition-all duration-300">
+         {{ 'CONTACT.SEND_MESSAGE' | translate }}
+        </button>
+      </form>
+    </div> -->
+
+    <!-- Thay thế phần form trong contact.html -->
+<div class="w-full h-full p-5 shadow-lg rounded-lg">
+  
+  <!-- Thông báo thành công -->
+  <div *ngIf="successMsg" 
+       class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg flex justify-between">
+    <span> {{ successMsg }}</span>
+    <button (click)="successMsg=''" class="text-green-700 hover:text-green-900">✕</button>
+  </div>
+
+  <!-- Thông báo lỗi -->
+  <div *ngIf="errorMsg" 
+       class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg flex justify-between">
+    <span> {{ errorMsg }}</span>
+    <button (click)="errorMsg=''" class="text-red-700 hover:text-red-900">✕</button>
+  </div>
+
+  <form class="flex flex-col md:gap-3" (ngSubmit)="submit()">
+    <strong>{{ 'CONTACT.QUESTION' | translate }}</strong>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block mt-1 md:mt-4">
+          {{ 'CONTACT.FULLNAME' | translate }} 
+          <sup class="text-red-500">*</sup>
+        </label>
+        <input type="text" 
+               [(ngModel)]="contactName" 
+               name="name" 
+               class="w-full p-2 border border-gray-300 rounded-lg" 
+               [placeholder]="'CONTACT.FULLNAME' | translate">
+      </div>
+      <div>
+        <label class="block mt-1 md:mt-4">
+          {{ 'AUTH.EMAIL' | translate }} 
+          <sup class="text-red-500">*</sup>
+        </label>
+        <input type="email" 
+               [(ngModel)]="contactEmail" 
+               name="email" 
+               class="w-full p-2 border border-gray-300 rounded-lg" 
+               placeholder="Email">
+      </div>
+    </div>
+
+    <div>
+      <label class="block mt-1 md:mt-4">
+        {{ 'CONTACT.SUBJECT' | translate }}
+        <sup class="text-red-500">*</sup>
+      </label>
+      <input type="text" 
+             [(ngModel)]="contactSubject" 
+             name="subject"
+             class="w-full p-2 border border-gray-300 rounded-lg"
+             [placeholder]="'CONTACT.SUBJECT' | translate">
+    </div>
+
+    <div>
+      <label class="block mt-1 md:mt-4">
+        {{ 'CONTACT.CONTENT' | translate }} 
+        <sup class="text-red-500">*</sup>
+      </label>
+      <textarea [(ngModel)]="contactMessage" 
+                name="message" 
+                class="w-full p-2 border border-gray-300 rounded-lg" 
+                [placeholder]="'CONTACT.CONTENT' | translate"
+                rows="5"></textarea>
+    </div>
+
+    <!-- Button với loading state -->
+    <button type="submit" 
+            [disabled]="isLoading"
+            [class]="'px-5 py-2 rounded-lg mt-4 transition-all duration-300 ' + 
+                     (isLoading ? 
+                       'bg-gray-400 cursor-not-allowed text-white' : 
+                       'bg-[#0e9e4d] text-white hover:bg-[#0e9e4d]/80 cursor-pointer')">
+      <span *ngIf="isLoading">
+        <app-icon name="loading"></app-icon> Đang gửi...
+      </span>
+      <span *ngIf="!isLoading">
+        {{ 'CONTACT.SEND_MESSAGE' | translate }}
+      </span>
+    </button>
+  </form>
+</div>
+    <div class="w-full h-full shadow-lg rounded-lg mb-1">
+      <iframe class="w-full h-full" loading="lazy"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.777223501563!2d105.81712407401008!3d21.00156538064092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135adc6d061c7cd%3A0x99e4459c217fb513!2zQ8O0bmcgdHkgQ-G7lSBwaOG6p24gQ8O0bmcgbmdo4buHIHbDoCBE4buLY2ggduG7pSBQaOG6p24gbeG7gW0gTOG6oWMgTG9uZyBRdcOibg!5e0!3m2!1svi!2s!4v1774337275992!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>

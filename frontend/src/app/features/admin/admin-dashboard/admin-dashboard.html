@@ -1,0 +1,70 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-100 via-blue-100 to-gray-200" *ngIf="stats">
+  <div class="sm:py-3 py-1 flex justify-between px-3 items-center text-center w-full shadow-md bg-white md:rounded-lg">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-700">Quản Trị</h1>
+  </div>
+
+  <div class="bg-white my-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-6 px-2  bg-cover bg-center rounded-xl" style="background-image: url('assets/vt.jpg');">
+    <div class="relative rounded-lg overflow-hidden m-2 bg-blue-500 shadow-md
+            transition-all duration-300 ease-in-out cursor-pointer
+            hover:-translate-y-2 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110
+            active:scale-[0.97]">
+
+  <div class="flex flex-col text-white items-end h-full p-2 gap-2 pl-2">
+    <span class="font-bold text-2xl">{{stats.totalTickets}}</span>
+    <span class="text-white text-[12px]">Tổng Số Vé</span>
+
+    <a routerLink="/admin/manage-tickets">
+      <button class="text-[12px] px-3 py-1 bg-white text-blue-500 rounded-md text-sm font-semibold shadow-sm">
+        Xem Tất Cả
+      </button>
+    </a>
+  </div>
+</div>
+
+    <div class="relative rounded-lg overflow-hidden m-2 bg-red-500 shadow-md
+            transition-all duration-300 ease-in-out cursor-pointer
+            hover:-translate-y-2 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110
+            active:scale-[0.97]">
+
+  <div class="flex flex-col text-white items-end h-full p-2 gap-2 pl-2">
+    <span class="font-bold text-2xl">{{stats.totalBookings}}</span>
+    <span class="text-white text-[12px]">Vé Đã Đặt</span>
+
+    <a routerLink="/admin/manage-tickets">
+      <button class="text-[12px] px-3 py-1 bg-white text-blue-500 rounded-md text-sm font-semibold shadow-sm">
+        Xem Tất Cả
+      </button>
+    </a>
+  </div>
+</div>
+
+    <div class="relative rounded-lg overflow-hidden m-2 bg-emerald-500 shadow-md
+            transition-all duration-300 ease-in-out cursor-pointer
+            hover:-translate-y-2 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110
+            active:scale-[0.97]">
+
+  <div class="flex flex-col text-white items-end h-full p-2 gap-2 pl-2">
+    <span class="font-bold text-2xl">{{stats.totalRevenue | currencyVnd}}</span>
+    <span class="text-white text-[12px]">Tổng Số Tiền Đã Thanh Toán Vé</span>
+
+    <a routerLink="/admin/manage-tickets">
+      <button class="text-[12px] px-3 py-1 bg-white text-blue-500 rounded-md text-sm font-semibold shadow-sm">
+        Xem Tất Cả
+      </button>
+    </a>
+  </div>
+</div>
+      <div class="relative rounded-lg overflow-hidden m-2 bg-purple-500 shadow-md
+            transition-all duration-300 ease-in-out cursor-pointer
+            hover:-translate-y-2 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110
+            active:scale-[0.97]">
+
+  <div class="flex flex-col text-white items-end h-full p-2 gap-2 pl-2">
+    <span class="font-bold text-2xl">{{stats.successRate}}%</span>
+    <span class="text-white text-[12px]">Tỷ Lệ Thanh Toán Thành Công</span>
+  </div>
+</div>
+  </div>
+
+</div>
+

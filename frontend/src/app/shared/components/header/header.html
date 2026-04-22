@@ -1,0 +1,184 @@
+<!-- Top bar (hidden on mobile) -->
+<div class="max-[900px]:hidden bg-gray-200">
+  <header class="max-[1800px]:px-[10%] h-8 flex px-[20%] max-[900px]:px-[1%] items-center justify-between p-2 gap-2 text-gray-700 text-[14px]">
+    <div class="flex gap-3">
+      <div class="flex gap-2">
+        <span class="text-[#1ba000]"><app-icon name="phone"></app-icon></span>
+        <span>+84 983085420</span>
+      </div>
+      <div>|</div>
+      <div class="flex gap-2">
+        <span class="text-[#1ba000]"><app-icon name="email"></app-icon></span>
+        <span>manhquan0415&#64;gmail.com</span>
+      </div>
+    </div>
+    <div class="flex gap-5">
+      <!-- Language -->
+      <div class="flex gap-2 relative">
+        <button (click)="isLanguageOpen = !isLanguageOpen"
+                class="cursor-pointer flex items-center gap-1 text-gray-700 hover:text-[#1ba000] transition-all duration-300">
+                 <img [src]="language === 'vi' ? 'assets/languageimg/vietnam.png' : 'assets/languageimg/my.png'" 
+         class="w-5 h-5 rounded-sm object-cover" alt="flag">
+          {{language === 'vi' ? 'Tiếng Việt' : 'English'}}
+          <app-icon [name]="isLanguageOpen ? 'up' : 'dow'"></app-icon>
+        </button>
+        <div *ngIf="isLanguageOpen" class="absolute top-full left-0 bg-white shadow-lg rounded mt-1 z-[100]">
+          <ul class="p-2 flex flex-col gap-2">
+            <li (click)="changeLanguage('vi')" class="cursor-pointer hover:text-[#1ba000]">Tiếng Việt</li>
+            <li (click)="changeLanguage('en')" class="cursor-pointer hover:text-[#1ba000]">English</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- User info or Login -->
+      <div *ngIf="currentUser" class="flex items-center">
+        <a [routerLink]="'/user/profile/profile-setting/' + currentUser.id" class="flex items-center px-3 gap-2 border-x border-gray-400">
+          <img [src]="avatarUrl" alt="" class="w-6 h-6 rounded-full">
+              <span>{{currentUser.name}}</span>
+        </a>
+        <div class="flex items-center px-3 gap-1">
+          <a *ngIf="isUserPath" routerLink="/" class="flex items-center gap-1">
+            <app-icon name="home"></app-icon>  <span>{{ 'HEADER.HOME' | translate }}</span>
+          </a>
+          <a *ngIf="!isUserPath" routerLink="/user/dashboard" class="flex items-center gap-1">
+            <app-icon name="Dashboard"></app-icon>  <span>{{ 'HEADER.DASHBOARD' | translate }}</span>
+          </a>
+        </div>
+      </div>
+      <div *ngIf="!currentUser" class="flex items-center gap-2">
+        <a routerLink="/signin" class="flex items-center gap-1">
+          <app-icon name="signin"></app-icon> <span>{{ 'HEADER.SIGNIN' | translate }}</span>
+        </a>
+        <span>/</span>
+        <a routerLink="/signup" class="flex items-center gap-1">
+          <app-icon name="signup"></app-icon> <span>{{ 'HEADER.SIGNUP' | translate }}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+</div>
+
+<!-- Main nav bar -->
+<div class="max-[1800px]:px-[5%] px-[20%] sticky -top-1 z-[80] h-20 w-full flex justify-between items-center bg-white shadow-md">
+  <a routerLink="/" class="flex gap-2">
+    <img class="max-[450px]:w-30 w-40 h-22 pl-10 pt-2 object-cover" src="assets/logo/phiethoc-1.png" alt="">
+  </a>
+
+  <!-- Desktop nav -->
+  <nav class="max-[900px]:hidden flex gap-5">
+    <ng-container *ngIf="!isUserPath || !currentUser">
+      <a *ngFor="let item of navbar" [routerLink]="item.path" routerLinkActive="text-[#1ba000]"
+         [routerLinkActiveOptions]="{exact: item.path === '/'}"
+         class="text-[16px] font-semibold hover:text-[#1ba000] transition-all duration-300 flex items-center gap-2 p-2">
+        <span class="text-[#1ba000]"><app-icon [name]="item.icon"></app-icon></span>
+          <span class="text-nowrap">{{ item.nameKey | translate }}</span>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="isUserPath && currentUser">
+      <div *ngFor="let item of dashboardNav" class="relative group">
+        <a [routerLink]="item.path" routerLinkActive="text-[#1ba000]"
+           class="text-[16px] font-semibold hover:text-[#1ba000] transition-all duration-300 flex items-center gap-2 p-2 border-b-3 rounded-2xl hover:border-green-500">
+          <span class="text-[#1ba000]"><app-icon [name]="item.icon"></app-icon></span>
+          <span class="text-nowrap">{{ item.nameKey | translate }}</span>
+        </a>
+        <div *ngIf="item.sub && item.sub.length > 0"
+             class="absolute left-0 top-full bg-white rounded mt-1 shadow-2xl invisible opacity-0 group-hover:opacity-100 group-hover:visible transition duration-300 z-10">
+          <ul class="divide-dashed divide-y divide-gray-300 flex flex-col">
+            <li *ngFor="let sub of item.sub">
+              <a [routerLink]="sub.path" routerLinkActive="text-[#1ba000]"
+                 class="min-w-max block text-[15px] px-4 py-2 text-sm hover:bg-[#1ba000] hover:text-white transition-all duration-300">
+               {{ sub.nameKey | translate }}
+              </a>
+            </li>
+            <li *ngIf="item.id === 4">
+              <a (click)="logout()" class="min-w-max block text-[15px] px-4 py-2 text-sm text-red-700 hover:bg-[#1ba000] hover:text-white cursor-pointer transition-all duration-300">
+                 {{ 'HEADER.LOGOUT' | translate }} <app-icon name="logout"></app-icon>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </nav>
+
+  <div class="flex pl-2 gap-5">
+    <a routerLink="/buytickets" class="max-[450px]:hidden flex items-center gap-2">
+      <button class="cursor-pointer flex justify-center items-center rounded-xl font-semibold overflow-hidden relative z-[100] border border-[#1ba000] group px-4 py-2">
+        <span class="relative z-10 text-nowrap text-green-600 group-hover:text-white text-xl duration-500 text-[13px]">{{ 'HEADER.BUYTICKET' | translate }} !</span>
+        <span class="absolute rounded-xl w-full h-full bg-[#1ba000] -left-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:left-0 duration-500"></span>
+        <span class="absolute rounded-xl w-full h-full bg-[#1ba000] -right-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:right-0 duration-500"></span>
+      </button>
+    </a>
+    <!-- Mobile menu toggle -->
+    <div class="max-[900px]:flex hidden gap-2">
+      <div class="text-[24px] text-[#1ba000] cursor-pointer" (click)="toggleMenu()">
+        <app-icon [name]="isMenuOpen ? 'close' : 'menu'"></app-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile menu -->
+<div *ngIf="isMenuOpen" class="min-[900px]:hidden fixed top-17 w-full z-[90] flex mt-1">
+  <div class="fixed bg-black opacity-30 z-[79] top-0 w-full h-full" (click)="isMenuOpen = false"></div>
+  <div class="relative bg-white flex flex-col shadow-lg w-full justify-between p-6 animate-slideDown z-[90]">
+    <!-- Mobile user info -->
+    <div class="flex flex-wrap items-center gap-3 text-sm text-gray-700 border-b pb-3 justify-center">
+      <div *ngIf="currentUser" class="flex items-center justify-center gap-4">
+        <a [routerLink]="'/user/profile/profile-setting/' + currentUser.id">
+          <div class="flex items-center gap-3 px-2">
+            <img [src]="avatarUrl" alt="" class="w-8 h-8 rounded-full object-cover">
+            <span class="text-sm font-medium truncate">{{currentUser.name}}</span>
+          </div>
+        </a>
+      </div>
+      <div *ngIf="!currentUser" class="flex items-center justify-center gap-4">
+        <a routerLink="/signin" class="flex items-center gap-2 text-[#1ba000] px-2" (click)="isMenuOpen = false">
+          <app-icon name="signin"></app-icon> <span class="text-sm">{{ 'HEADER.SIGNIN' | translate }}</span>
+        </a>
+        <div class="text-sm text-gray-400">|</div>
+        <a routerLink="/signup" class="flex items-center gap-2 text-[#1ba000] px-2" (click)="isMenuOpen = false">
+          <app-icon name="signup"></app-icon> <span class="text-sm">{{ 'HEADER.SIGNUP' | translate }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile nav items -->
+    <div class="overflow-y-auto h-[calc(100vh-200px)] space-y-2 mt-4">
+      <ng-container *ngIf="!isUserPath || !currentUser">
+        <a *ngFor="let item of navbar" [routerLink]="item.path"
+         (click)="isMenuOpen = false"
+           routerLinkActive="text-[#1ba000]" [routerLinkActiveOptions]="{exact: item.path === '/'}"
+           class="text-[16px] font-semibold hover:text-[#1ba000] transition-all duration-300 flex items-center gap-2 py-2 hover:bg-gray-100 rounded w-full">
+          <span class="text-[#1ba000]"><app-icon [name]="item.icon"></app-icon></span>
+           <span>{{ item.nameKey | translate }}</span>
+        </a>
+      </ng-container>
+      <ng-container *ngIf="isUserPath && currentUser">
+        <div *ngFor="let item of dashboardNav" class="relative">
+          <div class="flex items-center justify-between gap-2 py-2 hover:bg-gray-100 rounded w-full">
+            <a [routerLink]="item.path" (click)="isMenuOpen = false" class="flex items-center gap-2">
+              <span class="text-[#1ba000]"><app-icon [name]="item.icon"></app-icon></span>
+                  <span>{{ item.nameKey | translate }}</span>
+            </a>
+            <span *ngIf="item.sub" (click)="toggleSub(item.id)" class="text-[#1ba000] cursor-pointer">
+              <app-icon [name]="openSubId === item.id ? 'up' : 'dow'"></app-icon>
+            </span>
+          </div>
+          <div *ngIf="item.sub && openSubId === item.id" class="bg-white rounded shadow-md divide-y divide-gray-300">
+            <a *ngFor="let sub of item.sub" [routerLink]="sub.path"
+             (click)="isMenuOpen = false"
+               class="block px-4 py-2 text-sm hover:bg-[#1ba000] hover:text-white transition-all duration-300">
+                {{ sub.nameKey | translate }}
+            </a>
+            <a *ngIf="item.id === 4" (click)="logout()"
+               class="block px-4 py-2 text-sm text-red-700 hover:bg-[#1ba000] hover:text-white cursor-pointer transition-all duration-300">
+               {{ 'HEADER.LOGOUT' | translate }} <app-icon name="logout"></app-icon>
+            </a>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

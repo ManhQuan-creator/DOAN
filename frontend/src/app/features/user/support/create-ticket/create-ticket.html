@@ -1,0 +1,40 @@
+<div class="w-full h-48 flex items-center justify-center"
+     style="background-image: url('assets/background.jpg'); background-size: cover; background-position: center">
+  <div class="w-full h-full flex items-center justify-center bg-black/50">
+    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">{{ 'CREATE.CR1' | translate }}</h1>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto my-8 px-4">
+  <form (ngSubmit)="submit()" class="bg-white rounded-xl shadow-lg p-6 space-y-6 border border-gray-200">
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-gray-700 mb-2">{{ 'CREATE.CR2' | translate }} <sup class="text-red-600">*</sup></label>
+        <input type="text" [(ngModel)]="description" name="description" placeholder="Enter description"
+               class="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+      </div>
+      <div class="flex flex-col">
+        <label class="text-sm font-semibold text-gray-700 mb-2">{{ 'CREATE.CR3' | translate }}<sup class="text-red-600">*</sup></label>
+        <select [(ngModel)]="priority" name="priority"
+                class="p-3 border cursor-pointer border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+          <option [ngValue]="1">{{ 'CREATE.CR4' | translate }}</option>
+          <option [ngValue]="2">{{ 'CREATE.CR5' | translate }}</option>
+          <option [ngValue]="3">{{ 'CREATE.CR6' | translate }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label class="text-sm font-semibold text-gray-700 mb-2 block">{{ 'CREATE.CR7' | translate }}<sup class="text-red-600">*</sup></label>
+      <textarea [(ngModel)]="message" name="message" placeholder="Describe your issue"
+                class="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition w-full h-40 resize-none"></textarea>
+    </div>
+
+    <div class="flex justify-end">
+      <button type="submit"
+              class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-white bg-green-600 hover:bg-green-700 transition-all shadow-md hover:shadow-lg">
+        <app-icon name="send"></app-icon>  {{ 'CREATE.CR8' | translate }}
+      </button>
+    </div>
+  </form>
+</div>
